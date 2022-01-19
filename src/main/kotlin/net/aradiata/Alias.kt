@@ -1,4 +1,4 @@
-package net.aradiata.rpg
+package net.aradiata
 
 import org.bukkit.plugin.java.JavaPlugin
 

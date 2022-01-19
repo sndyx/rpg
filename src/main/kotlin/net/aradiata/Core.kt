@@ -1,4 +1,4 @@
-package net.aradiata.rpg
+package net.aradiata
 
 lateinit var plugin: Plugin
 

@@ -3,7 +3,7 @@ plugins {
     id("kr.entree.spigradle") version "1.2.4"
 }
 
-group = "net.aradiata.rpg"
+group = "net.aradiata"
 version = "1.0-SNAPSHOT"
 
 repositories {
