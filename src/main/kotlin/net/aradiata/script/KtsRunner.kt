@@ -12,7 +12,6 @@ val engine: ScriptEngine =
 
 inline fun <reified T> runScript(script: String): T =
     run { engine.eval(script) }
-        .takeIf { it is T }
-        ?.let { it as T } ?: error("Unexpected result.")
+        .let { it as? T } ?: error("Unexpected result.")
 
 inline fun <reified T> runScript(path: Path): T = runScript(path.readText())
