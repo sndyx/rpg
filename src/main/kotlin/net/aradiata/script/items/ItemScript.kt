@@ -13,7 +13,7 @@ class ItemScope {
         events.block()
     }
 
-    var rarity = Rarity.Default
+    var rarity = Rarity.Common
 
     fun rarity(rarity: Rarity) {
         this.rarity = rarity
@@ -27,6 +27,6 @@ class EventScope {
 
 fun test() {
     item("lightning-typhoon") {
-        rarity(Rarity.Default)
+        rarity(Rarity.Epic)
     }
 }

@@ -1,5 +1,10 @@
 package net.aradiata.script.items
 
 enum class Rarity {
-    Default,
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary,
+    Divine
 }
