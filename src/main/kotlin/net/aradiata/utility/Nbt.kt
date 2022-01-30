@@ -34,3 +34,11 @@ inline fun <reified T> PersistentDataContainer.get(
 inline fun <reified T> ItemMeta.getNbt(
     key: String
 ): T? = persistentDataContainer.get(key)
+
+inline fun <reified T> PersistentDataContainer.set(
+    key: String, value: T
+): Unit = set(NamespacedKey(plugin, key), PrimitivePersistentDataType(T::class.java), value!!)
+
+inline fun <reified T> ItemMeta.setNbt(
+    key: String, value: T
+): Unit = persistentDataContainer.set(key, value)
