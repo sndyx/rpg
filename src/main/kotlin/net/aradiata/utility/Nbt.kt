@@ -7,6 +7,8 @@ import org.bukkit.persistence.PersistentDataAdapterContext
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
+typealias NbtCompound = PersistentDataContainer
+
 class PrimitivePersistentDataType<T>(
     private val primitiveType: Class<T>
 ) : PersistentDataType<T, T> {
@@ -27,7 +29,7 @@ class PrimitivePersistentDataType<T>(
     
 }
 
-inline fun <reified T> PersistentDataContainer.get(
+inline fun <reified T> NbtCompound.get(
     key: String,
 ): T? = get(NamespacedKey(plugin, key), PrimitivePersistentDataType(T::class.java))
 
@@ -35,7 +37,7 @@ inline fun <reified T> ItemMeta.getNbt(
     key: String
 ): T? = persistentDataContainer.get(key)
 
-inline fun <reified T> PersistentDataContainer.set(
+inline fun <reified T> NbtCompound.set(
     key: String,
     value: T
 ): Unit = set(NamespacedKey(plugin, key), PrimitivePersistentDataType(T::class.java), value!!) // !!??
