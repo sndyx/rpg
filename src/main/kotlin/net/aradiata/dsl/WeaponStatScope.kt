@@ -22,3 +22,7 @@ enum class WeaponStatType {
 }
 
 data class WeaponStat(val type: WeaponStatType, val value: Double, val chance: Double = 100.0)
+
+
+
+//hi

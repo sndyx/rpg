@@ -15,3 +15,4 @@ inline fun <reified T> runScript(script: String): T =
         .let { it as? T } ?: error("Unexpected result.")
 
 inline fun <reified T> runScript(path: Path): T = runScript(path.readText())
+
