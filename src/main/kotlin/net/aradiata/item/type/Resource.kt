@@ -1,6 +1,10 @@
-package net.aradiata.item
+package net.aradiata.item.type
 
-class ResourceItem(
+import net.aradiata.item.Item
+import net.aradiata.item.ItemEventHandler
+import net.aradiata.item.Rarity
+
+class Resource(
     override val id: String,
     override val name: String,
     override val rarity: Rarity,

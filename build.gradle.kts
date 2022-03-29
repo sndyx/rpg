@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("script-runtime"))
     implementation(kotlinx("serialization-json", "1.3.2"))
     implementation(kotlinx("coroutines-core", "1.6.0"))
     implementation("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
