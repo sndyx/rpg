@@ -1,4 +1,4 @@
-package net.aradiata.item.type
+package net.aradiata.item
 
 interface RequirementHolder {
     

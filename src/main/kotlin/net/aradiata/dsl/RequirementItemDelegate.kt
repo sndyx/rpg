@@ -1,6 +1,8 @@
 package net.aradiata.dsl
 
-abstract class BaseRequirementDelegate : BaseItemDelegate() {
+import net.aradiata.item.ItemRequirements
+
+abstract class RequirementItemDelegate : ItemDelegate() {
     
     val requirements = RequirementsScope()
     
@@ -13,9 +15,12 @@ abstract class BaseRequirementDelegate : BaseItemDelegate() {
 class RequirementsScope {
     
     var level: Int? = null
-    
     var agility: Int? = null
     var strength: Int? = null
     var wisdom: Int? = null
+    
+    fun build(): ItemRequirements {
+        return ItemRequirements(level, agility, strength, wisdom)
+    }
     
 }

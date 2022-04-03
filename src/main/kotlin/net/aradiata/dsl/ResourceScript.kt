@@ -2,48 +2,15 @@ package net.aradiata.dsl
 
 import net.aradiata.item.Item
 import net.aradiata.item.Resource
-import net.aradiata.utility.toScriptSource
-import java.nio.file.Path
 import kotlin.script.experimental.annotations.KotlinScript
-import kotlin.script.experimental.api.*
-import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 
-@KotlinScript(
-    fileExtension = "resource.kts",
-    compilationConfiguration = ResourceCompilationConfiguration::class,
-    evaluationConfiguration = ResourceEvaluationConfiguration::class
-)
+@Delegate(ResourceDelegate::class)
+@KotlinScript(fileExtension = "resource.kts")
 abstract class ResourceScript
 
-object ResourceCompilationConfiguration : ScriptCompilationConfiguration({
-    implicitReceivers(ResourceDelegate::class)
-})
-
-class ResourceEvaluationConfiguration(
-    private val delegate: ResourceDelegate
-) : ScriptEvaluationConfiguration({
-    implicitReceivers(delegate)
-})
-
-fun runResourceScript(path: Path): Result<Item> {
-    val delegate = ResourceDelegate()
-    runCatching {
-        BasicJvmScriptingHost().eval(
-            path.toScriptSource(),
-            ResourceCompilationConfiguration,
-            ResourceEvaluationConfiguration(delegate)
-        )
-    }.onSuccess {
-        return Result.success(delegate.toItem())
-    }.onFailure {
-        return Result.failure(it)
-    }
-    return Result.failure(Exception()) // Impossible to get to
-}
-
-class ResourceDelegate : BaseItemDelegate() {
+class ResourceDelegate : ItemDelegate() {
     
-    override fun convertToItem(): Item {
+    override fun toItem(): Item {
         return Resource(
             id!!,
             name!!,

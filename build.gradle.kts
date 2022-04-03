@@ -22,6 +22,7 @@ dependencies {
     implementation(kotlinx("serialization-json", "1.3.2"))
     implementation(kotlinx("coroutines-core", "1.6.0"))
     implementation("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
+    implementation(kotlin("reflect"))
 }
 
 spigot {
@@ -48,6 +49,23 @@ spigot {
             defaults = "false"
         }
     }
+}
+
+tasks.withType<Jar> {
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    manifest {
+        attributes["Main-Class"] = "org.karrat.RunKt"
+    }
+    
+    from(sourceSets.main.get().output)
+    
+    dependsOn(configurations.runtimeClasspath)
+    from ({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    
 }
 
 fun DependencyHandler.kotlinx(module: String, version: String): String = "org.jetbrains.kotlinx:kotlinx-$module:$version"

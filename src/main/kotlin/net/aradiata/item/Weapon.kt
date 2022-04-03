@@ -1,7 +1,5 @@
 package net.aradiata.item
 
-import net.aradiata.item.type.ItemRequirements
-import net.aradiata.item.type.RequirementHolder
 import net.aradiata.utility.colored
 
 class Weapon(
@@ -10,7 +8,8 @@ class Weapon(
     override val rarity: Rarity,
     override val description: String?,
     override val requirements: ItemRequirements,
-    private val stats: List<WeaponStat>
+    val stats: List<WeaponStat>,
+    val suppressMeleeDamage: Boolean
 ) : Item, RequirementHolder {
     
     override fun writeDetails(lore: MutableList<String>) { // Don't ask lmao
