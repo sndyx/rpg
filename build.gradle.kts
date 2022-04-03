@@ -16,7 +16,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(kotlin("script-runtime"))
+    implementation(kotlin("scripting-common"))
+    implementation(kotlin("scripting-jvm"))
+    implementation(kotlin("scripting-jvm-host"))
     implementation(kotlinx("serialization-json", "1.3.2"))
     implementation(kotlinx("coroutines-core", "1.6.0"))
     implementation("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
@@ -32,6 +34,12 @@ spigot {
             permission = "aradiata.command.setrank"
             permissionMessage = "You do not have permission!"
             usage = "/setrank <player> <rank>"
+        }
+        create("items") {
+            description = "gives u an item lol"
+            permission = "none.lol"
+            permissionMessage = "You do not have permission!"
+            usage = "/items [reload |get <id>]"
         }
     }
     permissions {

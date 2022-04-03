@@ -1,14 +1,13 @@
 package net.aradiata.item.type
 
-import net.aradiata.item.Item
-
-interface RequirementItem : Item {
+interface RequirementHolder {
     
     val requirements: ItemRequirements
     
 }
 
 data class ItemRequirements(
+    val requiredLevel: Int? = null,
     val requiredAgility: Int? = null,
     val requiredStrength: Int? = null,
     val requiredWisdom: Int? = null
