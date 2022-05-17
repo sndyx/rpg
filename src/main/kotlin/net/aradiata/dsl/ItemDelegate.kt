@@ -6,6 +6,7 @@ import net.aradiata.item.Rarity
 abstract class ItemDelegate {
     
     var id: String? = null
+    var texId: Int? = null
     var name: String? = null
     var rarity: Rarity? = null
     var description: String? = null
@@ -14,6 +15,7 @@ abstract class ItemDelegate {
     
     fun checkProperties() {
         checkNotNull(id) { "Property `id` must be assigned." }
+        checkNotNull(texId) { "Property `texId` must be assigned." }
         checkNotNull(name) { "Property `name` must be assigned." }
         checkNotNull(rarity) { "Property `rarity` must be assigned." }
     }

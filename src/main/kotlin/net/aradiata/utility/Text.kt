@@ -1,27 +1,41 @@
 package net.aradiata.utility
 
-fun String.colored(): String = replace(Regex("&([0-9a-fA-FklmnorKLMNOR])"), "§$1")
+fun String.colored(): String = replace(Regex("&([0-9a-fA-Fkl-oL-OrKL-OR])"), "§$1")
+
+const val LINE_LENGTH = 30
 
 fun writeWrappingText(list: MutableList<String>, text: String) {
-    var lastColorCode = 'f'
-    var count = 0
-    var i = 0
-    val builder = StringBuilder()
-    while (i < text.length) {
-        if (text[i] == '§' && text[i + 1].toString().matches(Regex("[0-9a-fA-FklmnorKLMNOR]"))) {
-            builder.append(text[i]).append(text[i + 1])
-            lastColorCode = text[i + 1]
-            i += 2
+    val words = text.split(' ')
+    var lastColor = 'f'
+    var line = ""
+    
+    words.forEach { word ->
+        
+        // Find color codes and remove
+        var i = 0
+        var actualLength = 0
+        while (i < word.length) {
+            if (word[i] == '§') {
+                lastColor = word[i + 1]
+                i += 2
+            } else {
+                actualLength++
+                i++
+            }
+        }
+        
+        // Check for wrapping
+        if (actualLength > LINE_LENGTH) {
+            list.add(line)
+            list.add("§$lastColor$word")
+        } else if (line.length + actualLength > LINE_LENGTH) {
+            list.add(line)
+            line = "§$lastColor$word "
         } else {
-            builder.append(text[i])
-            count++
-            i++
+            line += "$word "
         }
-        if (count == 30) {
-            list.add(builder.toString())
-            builder.clear().append('§').append(lastColorCode)
-            count = 0
-        }
+        
     }
-    list.add(builder.toString())
+    // Add last line
+    list.add(line)
 }

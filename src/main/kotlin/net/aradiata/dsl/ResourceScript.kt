@@ -10,13 +10,12 @@ abstract class ResourceScript
 
 class ResourceDelegate : ItemDelegate() {
     
-    override fun toItem(): Item {
-        return Resource(
-            id!!,
-            name!!,
-            rarity!!,
-            description
-        )
-    }
+    override fun toItem(): Item = Resource(
+        id!!,
+        texId!!,
+        name!!,
+        rarity!!,
+        description
+    )
     
 }

@@ -1,14 +1,16 @@
 package net.aradiata.item
 
-import net.aradiata.utility.colored
-import net.aradiata.utility.writeWrappingText
+import net.aradiata.utility.*
 import org.bukkit.Material
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import java.io.Serializable
 
-interface Item {
+interface Item : Serializable {
     
     val id: String
+    val texId: Int
     val name: String
     val rarity: Rarity
     val description: String?
@@ -23,7 +25,7 @@ interface Item {
             is Weapon -> {
                 Material.NETHERITE_SWORD
             }
-            else -> error("d")
+            else -> error("")
         }
         val item = ItemStack(material, 1)
         val meta = item.itemMeta
@@ -37,13 +39,16 @@ interface Item {
         val lore = mutableListOf<String>()
         lore.add("")
         writeDetails(lore)
+        if (lore.size == 1) lore.removeAt(0)
         if (description != null) {
             lore.add("")
-            writeWrappingText(lore, "&8&o${description}".colored())
+            writeWrappingText(lore, "&8${description}".colored())
         }
         lore.add("")
         lore.add("&${rarity.colorCode}&l${rarity.name}".colored())
         data.lore = lore
+        data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
+        data.getNbt<NbtCompound>("tag")?.set("Damage", texId)
     }
     
 }

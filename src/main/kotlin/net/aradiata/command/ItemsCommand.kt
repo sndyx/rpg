@@ -1,6 +1,6 @@
 package net.aradiata.command
 
-import net.aradiata.dsl.loadAllItems
+import net.aradiata.dsl.loadItems
 import net.aradiata.plugin
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -11,7 +11,7 @@ object ItemsCommand : CommandExecutor {
     
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args[0] == "reload") {
-            plugin.items = loadAllItems()
+            plugin.items = loadItems()
         } else if (args[0] == "get") {
             if (sender is Player) {
                 val item = plugin.items[args[1]]

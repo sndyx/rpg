@@ -7,25 +7,23 @@ import net.aradiata.item.WeaponStatType
 import kotlin.script.experimental.annotations.KotlinScript
 
 @Delegate(WeaponDelegate::class)
-@KotlinScript(fileExtension = "weapon.kts")
+@KotlinScript(fileExtension = "resource.kts")
 abstract class WeaponScript
 
 class WeaponDelegate : RequirementItemDelegate() {
     
     private val weaponStats = WeaponStatsScope()
     
-    override fun toItem(): Item {
-        
-        return Weapon(
-            id!!,
-            name!!,
-            rarity!!,
-            description,
-            requirements.build(),
-            weaponStats.build(),
-            weaponStats.suppressMeleeDamage
-        )
-    }
+    override fun toItem(): Item = Weapon(
+        id!!,
+        texId!!,
+        name!!,
+        rarity!!,
+        description,
+        requirements.build(),
+        weaponStats.build(),
+        weaponStats.suppressMeleeDamage
+    )
     
     fun stats(block: WeaponStatsScope.() -> Unit) {
         weaponStats.block()

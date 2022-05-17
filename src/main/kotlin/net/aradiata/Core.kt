@@ -1,18 +1,18 @@
 package net.aradiata
 
 import net.aradiata.command.ItemsCommand
-import net.aradiata.dsl.loadAllItems
+import net.aradiata.dsl.loadItems
 import net.aradiata.item.Item
 
 lateinit var plugin: PluginCore
 
 class PluginCore : Plugin() {
     
-    var items: Map<String, Item>
+    var items: Map<String, Item> = mapOf()
     
-    init {
+    override fun onEnable() {
         plugin = this
-        items = loadAllItems()
+        items = loadItems()
         getCommand("items")!!.setExecutor(ItemsCommand)
     }
     

@@ -1,6 +1,8 @@
 package net.aradiata.item
 
-interface RequirementHolder {
+import java.io.Serializable
+
+interface RequirementHolder : Serializable {
     
     val requirements: ItemRequirements
     
@@ -11,4 +13,4 @@ data class ItemRequirements(
     val requiredAgility: Int? = null,
     val requiredStrength: Int? = null,
     val requiredWisdom: Int? = null
-)
+) : Serializable

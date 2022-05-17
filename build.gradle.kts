@@ -1,10 +1,8 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import kr.entree.spigradle.attribute.Load
 
 plugins {
     kotlin("jvm") version "1.5.10"
     kotlin("plugin.serialization") version "1.6.10"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
     id("kr.entree.spigradle") version "1.2.4"
 }
 
@@ -16,15 +14,20 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
+val shade: Configuration by configurations.creating {
+    configurations.implementation.get().extendsFrom(this)
+}
+
 dependencies {
-    shadow(kotlin("stdlib"))
-    shadow(kotlin("reflect"))
-    shadow(kotlin("scripting-common"))
-    shadow(kotlin("scripting-jvm"))
-    shadow(kotlin("scripting-jvm-host"))
-    shadow(kotlinx("serialization-json", "1.3.2"))
-    shadow(kotlinx("coroutines-core", "1.6.0"))
-    implementation("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
+    implementation(kotlin("scripting-common"))
+    implementation(kotlin("scripting-jvm"))
+    implementation(kotlin("scripting-jvm-host"))
+    implementation(kotlin("script-runtime"))
+    implementation(kotlinx("serialization-json", "1.3.2"))
+    implementation(kotlinx("coroutines-core", "1.6.0"))
+    compileOnly("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
 }
 
 spigot {
@@ -51,6 +54,19 @@ spigot {
             defaults = "false"
         }
     }
+}
+
+tasks.withType<Jar> {
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    from(sourceSets.main.get().output)
+    
+    dependsOn(configurations.runtimeClasspath)
+    from ({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    
 }
 
 fun DependencyHandler.kotlinx(module: String, version: String): String = "org.jetbrains.kotlinx:kotlinx-$module:$version"

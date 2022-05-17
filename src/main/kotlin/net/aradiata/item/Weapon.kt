@@ -1,16 +1,18 @@
 package net.aradiata.item
 
 import net.aradiata.utility.colored
+import java.io.Serializable
 
 class Weapon(
     override val id: String,
+    override val texId: Int,
     override val name: String,
     override val rarity: Rarity,
     override val description: String?,
     override val requirements: ItemRequirements,
     val stats: List<WeaponStat>,
     val suppressMeleeDamage: Boolean
-) : Item, RequirementHolder {
+) : Item, RequirementHolder, Serializable {
     
     override fun writeDetails(lore: MutableList<String>) { // Don't ask lmao
         stats.sortedWith(compareBy<WeaponStat> { it.type.ordinal }.thenBy { it.chance }.thenBy { it.value }).apply {
@@ -26,9 +28,9 @@ class Weapon(
     
 }
 
-class WeaponStat(val type: WeaponStatType, val value: Double, val chance: Double)
+class WeaponStat(val type: WeaponStatType, val value: Double, val chance: Double) : Serializable
 
-enum class WeaponStatType(val isPrimary: Boolean, val displayName: String) {
+enum class WeaponStatType(val isPrimary: Boolean, val displayName: String) : Serializable {
     
     Melee(true, "Melee Damage"),
     Magic(true, "Magic Damage"),
