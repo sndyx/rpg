@@ -1,7 +1,7 @@
 import kr.entree.spigradle.attribute.Load
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.6.0"
     kotlin("plugin.serialization") version "1.6.10"
     id("kr.entree.spigradle") version "1.2.4"
 }
