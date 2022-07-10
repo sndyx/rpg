@@ -17,7 +17,7 @@ interface Item : Bundle {
 
     fun writeDetails(lore: MutableList<String>)
 
-    override fun next(): Item = this
+    override fun next(): List<Item> = listOf(this)
 
     fun new(): ItemStack {
         val item = ItemStack(material, 1)

@@ -27,12 +27,12 @@ dependencies {
     implementation(kotlin("script-runtime"))
     implementation(kotlinx("serialization-json", "1.3.2"))
     implementation(kotlinx("coroutines-core", "1.6.0"))
-    compileOnly("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
 }
 
 spigot {
     authors = listOf("sndy")
-    apiVersion = "1.18"
+    apiVersion = "1.19"
     load = Load.STARTUP
     commands {
         create("setrank") {

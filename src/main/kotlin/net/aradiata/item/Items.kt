@@ -1,6 +1,8 @@
 package net.aradiata.item
 
+import net.aradiata.item.impl.Fiber
 import net.aradiata.item.impl.LightningTyphoon
+import net.aradiata.item.impl.Seeds
 
 object Items {
 
@@ -8,7 +10,9 @@ object Items {
 
     init {
         registry.putAll(arrayOf(
-            LightningTyphoon
+            LightningTyphoon,
+            Fiber,
+            Seeds
         ).associateBy { it.id })
     }
 
