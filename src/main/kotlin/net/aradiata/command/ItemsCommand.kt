@@ -46,9 +46,9 @@ object ItemsCommand : CommandExecutor, Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        event.isCancelled = true
         val page = itemMenus.indexOf(event.inventory)
         if (page == -1) return
+        event.isCancelled = true
         if (event.slot == 3 && page != 0) event.whoClicked.openInventory(itemMenus[page - 1])
         else if (event.slot == 5 && page != itemMenus.size - 1) event.whoClicked.openInventory(itemMenus[page + 1])
         else if (event.currentItem != null) event.whoClicked.setItemOnCursor(event.currentItem)
