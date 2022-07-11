@@ -3,6 +3,7 @@ package net.aradiata.block
 import net.aradiata.item.Item
 import net.aradiata.item.impl.Dandelion
 import net.aradiata.item.impl.bundle.GrassBreakBundle
+import net.aradiata.item.impl.bundle.WheatBreakBundle
 import net.aradiata.plugin
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -24,6 +25,7 @@ object BlockBreakListener : Listener {
             val drops: List<Item> = when (event.block.type) {
                 Material.GRASS -> GrassBreakBundle.next()
                 Material.DANDELION -> Dandelion.next()
+                Material.WHEAT -> WheatBreakBundle.next()
                 else -> { return }
             }
             tasks.add(state)

@@ -12,7 +12,8 @@ object Items {
             PinkSpell,
             Fiber,
             Seeds,
-            Dandelion
+            Dandelion,
+            Wheat
         ).associateBy { it.id })
     }
 
