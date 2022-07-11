@@ -11,7 +11,8 @@ object Items {
             LightningTyphoon,
             PinkSpell,
             Fiber,
-            Seeds
+            Seeds,
+            Dandelion
         ).associateBy { it.id })
     }
 
