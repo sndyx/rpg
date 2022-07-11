@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack
 object ItemsCommand : CommandExecutor, Listener {
 
     private val itemMenus = Array(Items.registry.size / 27 + 1) {
-        menu(4) {
+        menu(4, "Items | Page ${it + 1}") {
             Items.registry.values.drop(27 * it).take(27).forEachIndexed { index, item ->
                 slot(index + 9, item.new())
             }

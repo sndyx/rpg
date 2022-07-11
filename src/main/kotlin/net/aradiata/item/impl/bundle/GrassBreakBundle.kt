@@ -9,8 +9,8 @@ import kotlin.random.Random
 object GrassBreakBundle : Bundle {
 
     override fun next(): List<Item> = buildList {
-        if (Random.nextInt(1, 6) == 1) add(Seeds)
-        if (Random.nextInt(1, 8) == 1) add(Fiber)
+        if (Random.nextInt(1, 8) == 1) add(Seeds)
+        if (Random.nextInt(1, 10) == 1) add(Fiber)
     }
 
 }

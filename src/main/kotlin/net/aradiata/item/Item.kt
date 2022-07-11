@@ -28,7 +28,7 @@ interface Item : Bundle {
     }
 
     fun sync(data: ItemMeta) {
-        data.setDisplayName("&${rarity.colorCode}&l$name".colored())
+        data.setDisplayName("&${rarity.colorCode}$name".colored())
         val lore = mutableListOf<String>()
         lore.add("")
         writeDetails(lore)
@@ -40,9 +40,10 @@ interface Item : Bundle {
         lore.add("")
         lore.add("&${rarity.colorCode}&l${rarity.name}".colored())
         data.lore = lore
+        data.isUnbreakable = true
         data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
         data.getNbt<NbtCompound>("tag")?.set("RpgId", id)
-        data.getNbt<NbtCompound>("tag")?.set("Damage", texId)
+        data.setCustomModelData(texId)
     }
 
 }
