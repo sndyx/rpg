@@ -1,9 +1,7 @@
-package net.aradiata.block
+package net.aradiata.block.queue
 
 import net.aradiata.item.Item
-import net.aradiata.structure.PluginEnable
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 
 interface BlockRegenQueue {
     fun handles(block: Block): Boolean

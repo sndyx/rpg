@@ -5,9 +5,7 @@ import net.aradiata.command.ItemsCommand
 import net.aradiata.player.JoinLeaveListener
 import net.aradiata.structure.PluginEnable
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.event.Listener
-import kotlin.random.Random
 
 lateinit var plugin: PluginCore
 

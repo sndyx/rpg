@@ -1,4 +1,4 @@
-package net.aradiata.block
+package net.aradiata.block.queue
 
 import net.aradiata.item.Item
 import net.aradiata.item.impl.Coal
@@ -7,7 +7,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.BlockState
 import kotlin.random.Random
 
 object StoneRegenQueue: BlockRegenQueue {

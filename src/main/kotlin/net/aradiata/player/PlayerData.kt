@@ -2,12 +2,9 @@ package net.aradiata.player
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
 import net.aradiata.item.ItemData
 import net.aradiata.item.Items
-import net.aradiata.utility.NbtCompound
-import net.aradiata.utility.get
-import net.aradiata.utility.getNbt
 import org.bukkit.entity.Player
 import kotlin.io.path.*
 

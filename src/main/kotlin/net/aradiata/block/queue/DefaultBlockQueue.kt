@@ -1,16 +1,14 @@
-package net.aradiata.block
+package net.aradiata.block.queue
 
 import net.aradiata.bundles.item.GrassBreakBundle
 import net.aradiata.bundles.item.WheatBreakBundle
 import net.aradiata.item.Item
-import net.aradiata.item.impl.Coal
 import net.aradiata.item.impl.Dandelion
 import net.aradiata.plugin
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockState
-import java.lang.RuntimeException
 
 object DefaultBlockQueue: BlockRegenQueue {
     private val blocks: MutableList<BlockState> = mutableListOf()
