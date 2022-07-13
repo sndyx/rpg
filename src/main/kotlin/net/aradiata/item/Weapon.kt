@@ -1,7 +1,6 @@
 package net.aradiata.item
 
 import net.aradiata.utility.colored
-import org.bukkit.Material
 
 interface Weapon : Item {
 
