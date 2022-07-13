@@ -12,11 +12,9 @@ import kotlin.random.Random
 object StoneRegenQueue: BlockRegenQueue {
 
     private val stone: MutableList<Location> = mutableListOf()
-
-    override fun handles(block: Block): Boolean {
-        return block.type == Material.TUFF || block.type == Material.STONE
-    }
-
+    
+    override val handles: List<Material> = listOf(Material.TUFF, Material.STONE)
+    
     override fun handleBlockBroken(tool: Item?, block: Block): List<Item>? {
         stone.add(block.location)
 

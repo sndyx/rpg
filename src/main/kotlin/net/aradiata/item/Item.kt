@@ -22,7 +22,7 @@ interface Item : ItemBundle {
     companion object {
         
         fun from(stack: ItemStack): Item? {
-            return Items.registry[stack.itemMeta?.getNbt<NbtCompound>("tag")?.get("RpgId")]
+            return Items.registry[stack.itemMeta?.customModelData]
         }
         
     }

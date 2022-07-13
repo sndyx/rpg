@@ -1,11 +1,13 @@
 package net.aradiata.block.queue
 
 import net.aradiata.item.Item
+import org.bukkit.Material
 import org.bukkit.block.Block
 
 interface BlockRegenQueue {
-    fun handles(block: Block): Boolean
-
+    
+    val handles: List<Material>
+    
     fun handleBlockBroken(tool: Item?, block: Block): List<Item>?
 
     fun regenAll()

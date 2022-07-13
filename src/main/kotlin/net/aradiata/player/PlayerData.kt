@@ -12,12 +12,11 @@ import kotlin.io.path.*
 val json = Json { prettyPrint = true }
 
 // this should probably be kept cached
-class PlayerData(private val player: Player) {
+class PlayerData(player: Player) {
 
-    private val folder
-     get() = Path("rpg/players/${player.uniqueId}")
+    private val folder = Path("rpg/players/${player.uniqueId}")
 
-    private fun writeJsonToFolder(fileName: String, obj: () -> Any) {
+    private inline fun <reified T> writeJsonToFolder(fileName: String, obj: T) {
         folder.resolve(fileName).writeText(json.encodeToString(obj))
     }
 
@@ -29,17 +28,13 @@ class PlayerData(private val player: Player) {
     var meta: PlayerMeta
         get() = readJsonFromFolder("meta.json")
         set(value) {
-            writeJsonToFolder("meta.json") {
-                value
-            }
+            writeJsonToFolder("meta.json", value)
         }
 
     var activeProfile: Profile
         get() = readJsonFromFolder("${meta.profile}.profile.json")
         set(value) {
-            writeJsonToFolder("${meta.profile}.profile.json") {
-                value
-            }
+            writeJsonToFolder("${meta.profile}.profile.json", value)
         }
 
     // so scuffed
@@ -51,7 +46,6 @@ class PlayerData(private val player: Player) {
                 Rank.Default.name,
                 0
             )
-
             activeProfile = serializePlayerData(player)
         }
     }

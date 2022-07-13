@@ -11,12 +11,11 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockState
 
 object DefaultBlockQueue: BlockRegenQueue {
+    
     private val blocks: MutableList<BlockState> = mutableListOf()
-
-    override fun handles(block: Block): Boolean {
-        return block.type == Material.DANDELION || block.type == Material.WHEAT || block.type == Material.GRASS
-    }
-
+    
+    override val handles: List<Material> = listOf(Material.DANDELION, Material.WHEAT, Material.GRASS)
+    
     override fun handleBlockBroken(tool: Item?, block: Block): List<Item>? {
         val state = block.state
         blocks.add(state)

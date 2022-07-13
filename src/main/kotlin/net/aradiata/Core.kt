@@ -11,14 +11,12 @@ lateinit var plugin: PluginCore
 
 class PluginCore : Plugin() {
 
-    val listeners: List<Listener>
-        get() = listOf(BlockBreakListener, JoinLeaveListener)
+    private val listeners: List<Listener> = listOf(BlockBreakListener, JoinLeaveListener, ItemsCommand)
 
     override fun onEnable() {
         plugin = this
 
         getCommand("items")!!.setExecutor(ItemsCommand)
-        Bukkit.getPluginManager().registerEvents(ItemsCommand, this)
 
         for (listener in listeners) {
             Bukkit.getPluginManager().registerEvents(listener, this)
