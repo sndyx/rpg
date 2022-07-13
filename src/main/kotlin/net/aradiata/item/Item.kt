@@ -1,12 +1,13 @@
 package net.aradiata.item
 
+import net.aradiata.bundles.item.ItemBundle
 import net.aradiata.utility.*
 import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
-interface Item : Bundle {
+interface Item : ItemBundle {
 
     val configId: String
     val id: Int

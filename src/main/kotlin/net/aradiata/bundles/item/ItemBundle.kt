@@ -1,8 +1,9 @@
-package net.aradiata.item
+package net.aradiata.bundles.item
 
+import net.aradiata.item.Item
 import kotlin.random.Random
 
-interface Bundle {
+interface ItemBundle {
 
     fun determineItemWeight(item: Item?): Double = 0.0
     
