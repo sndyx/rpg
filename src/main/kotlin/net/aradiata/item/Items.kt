@@ -13,7 +13,10 @@ object Items {
             Fiber,
             Seeds,
             Dandelion,
-            Wheat
+            Wheat,
+            WoodenHoe,
+            TheHoeOfAllHoes,
+            Coal,
         ).associateBy { it.id })
     }
 

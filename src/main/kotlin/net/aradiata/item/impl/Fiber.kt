@@ -5,7 +5,7 @@ import net.aradiata.item.Resource
 
 object Fiber : Resource {
 
-    override val id: String = "plant-fiber"
+    override val id: String = "plant_fiber"
     override val texId: Int = 1
     override val name: String = "Plant Fiber"
     override val rarity: Rarity = Rarity.Common

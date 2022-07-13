@@ -46,6 +46,7 @@ object ItemsCommand : CommandExecutor, Listener {
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
+        if (event.slot > 35) return
         val page = itemMenus.indexOf(event.inventory)
         if (page == -1) return
         event.isCancelled = true

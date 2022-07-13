@@ -5,7 +5,7 @@ import net.aradiata.utility.colored
 
 object PinkSpell : Weapon {
     
-    override val id: String = "pink-spell"
+    override val id: String = "pink_spell"
     override val texId: Int = 2
     override val name: String = "Pink Spell"
     override val rarity: Rarity = Rarity.Divine

@@ -17,8 +17,16 @@ interface Item : Bundle {
 
     fun writeDetails(lore: MutableList<String>)
 
-    override fun next(): List<Item> = listOf(this)
+    override fun next(tool: Item?): List<Item> = listOf(this)
 
+    companion object {
+        
+        fun from(stack: ItemStack): Item? {
+            return Items.registry[stack.itemMeta?.getNbt<NbtCompound>("tag")?.get("RpgId")]
+        }
+        
+    }
+    
     fun new(): ItemStack {
         val item = ItemStack(material, 1)
         val meta = item.itemMeta
