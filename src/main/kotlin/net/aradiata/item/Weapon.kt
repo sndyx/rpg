@@ -8,9 +8,6 @@ interface Weapon : Item {
     val stats: List<WeaponStat>
     val suppressMeleeDamage: Boolean
 
-    override val material: Material
-        get() = Material.NETHERITE_SWORD
-
     override fun writeDetails(lore: MutableList<String>) {
         stats.sortedWith(compareBy<WeaponStat> { it.type.ordinal }.thenBy { it.chance }.thenBy { it.value }).apply {
             filter { it.type.isPrimary }.forEach {

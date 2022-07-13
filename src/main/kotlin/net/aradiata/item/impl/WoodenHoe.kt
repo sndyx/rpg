@@ -5,8 +5,8 @@ import net.aradiata.item.Tool
 
 object WoodenHoe : Tool {
     
-    override val id: String = "wooden_hoe"
-    override val texId: Int = 1
+    override val configId: String = "wooden_hoe"
+    override val id: Int = 9
     override val name: String = "Wooden Hoe"
     override val rarity: Rarity = Rarity.Common
     override val description: String = "A sturdy wooden hoe."

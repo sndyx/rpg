@@ -2,6 +2,7 @@ package net.aradiata
 
 import net.aradiata.block.BlockBreakListener
 import net.aradiata.command.ItemsCommand
+import net.aradiata.player.JoinLeaveListener
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import kotlin.random.Random
@@ -15,6 +16,7 @@ class PluginCore : Plugin() {
         getCommand("items")!!.setExecutor(ItemsCommand)
         Bukkit.getPluginManager().registerEvents(ItemsCommand, this)
         Bukkit.getPluginManager().registerEvents(BlockBreakListener, this)
+        Bukkit.getPluginManager().registerEvents(JoinLeaveListener, this)
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, {
             BlockBreakListener.stone.forEach {
                 it.world?.getBlockAt(it)?.setType(when (Random.nextInt(1, 10)) {

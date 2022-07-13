@@ -4,7 +4,7 @@ import net.aradiata.item.impl.*
 
 object Items {
 
-    val registry: MutableMap<String, Item> = mutableMapOf()
+    val registry: MutableMap<Int, Item> = mutableMapOf()
 
     init {
         registry.putAll(arrayOf(

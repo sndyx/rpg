@@ -5,8 +5,8 @@ import net.aradiata.item.Resource
 
 object Seeds : Resource {
 
-    override val id: String = "wheat_seeds"
-    override val texId: Int = 2
+    override val configId: String = "wheat_seeds"
+    override val id: Int = 6
     override val name: String = "Wheat Seeds"
     override val rarity: Rarity = Rarity.Common
     override val description: String? = null

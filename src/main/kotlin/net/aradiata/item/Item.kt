@@ -8,9 +8,8 @@ import org.bukkit.inventory.meta.ItemMeta
 
 interface Item : Bundle {
 
-    val id: String
-    val texId: Int
-    val material: Material
+    val configId: String
+    val id: Int
     val name: String
     val rarity: Rarity
     val description: String?
@@ -28,7 +27,7 @@ interface Item : Bundle {
     }
     
     fun new(): ItemStack {
-        val item = ItemStack(material, 1)
+        val item = ItemStack(Material.STICK, 1)
         val meta = item.itemMeta
         sync(meta!!)
         item.itemMeta = meta // Not a reference for whatever godforsaken reason
@@ -50,8 +49,7 @@ interface Item : Bundle {
         data.lore = lore
         data.isUnbreakable = true
         data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
-        data.getNbt<NbtCompound>("tag")?.set("RpgId", id)
-        data.setCustomModelData(texId)
+        data.setCustomModelData(id)
     }
 
 }
