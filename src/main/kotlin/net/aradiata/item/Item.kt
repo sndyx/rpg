@@ -22,7 +22,13 @@ interface Item : ItemBundle {
     companion object {
         
         fun from(stack: ItemStack): Item? {
-            return Items.registry[stack.itemMeta?.customModelData]
+            return stack.itemMeta?.run {
+                if (hasCustomModelData()) {
+                    Items.registry[customModelData]
+                } else {
+                    null
+                }
+            }
         }
         
     }
