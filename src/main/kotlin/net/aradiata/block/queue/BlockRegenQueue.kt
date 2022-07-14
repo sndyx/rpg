@@ -6,7 +6,7 @@ import org.bukkit.block.Block
 
 interface BlockRegenQueue {
     
-    val handles: List<Material>
+    val handled: List<Material>
     
     fun handleBlockBroken(tool: Item?, block: Block): List<Item>?
 

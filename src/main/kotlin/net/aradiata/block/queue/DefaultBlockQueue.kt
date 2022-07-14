@@ -14,7 +14,7 @@ object DefaultBlockQueue: BlockRegenQueue {
     
     private val blocks: MutableList<BlockState> = mutableListOf()
     
-    override val handles: List<Material> = listOf(Material.DANDELION, Material.WHEAT, Material.GRASS)
+    override val handled: List<Material> = listOf(Material.DANDELION, Material.WHEAT, Material.GRASS)
     
     override fun handleBlockBroken(tool: Item?, block: Block): List<Item>? {
         val state = block.state

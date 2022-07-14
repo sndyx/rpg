@@ -22,8 +22,8 @@ object BlockBreakListener : Listener, PluginEnable {
             val tool = Item.from(event.player.inventory.itemInMainHand)
 
             val drops: List<Item> = when(block.type) {
-                in StoneRegenQueue.handles -> StoneRegenQueue.handleBlockBroken(tool, block)
-                in DefaultBlockQueue.handles -> DefaultBlockQueue.handleBlockBroken(tool, block)
+                in StoneRegenQueue.handled -> StoneRegenQueue.handleBlockBroken(tool, block)
+                in DefaultBlockQueue.handled -> DefaultBlockQueue.handleBlockBroken(tool, block)
                 else -> return
             }!!
 

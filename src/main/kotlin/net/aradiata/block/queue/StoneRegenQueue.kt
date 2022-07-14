@@ -13,7 +13,7 @@ object StoneRegenQueue: BlockRegenQueue {
 
     private val stone: MutableList<Location> = mutableListOf()
     
-    override val handles: List<Material> = listOf(Material.TUFF, Material.STONE)
+    override val handled: List<Material> = listOf(Material.TUFF, Material.STONE)
     
     override fun handleBlockBroken(tool: Item?, block: Block): List<Item>? {
         stone.add(block.location)
