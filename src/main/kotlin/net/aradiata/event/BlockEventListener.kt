@@ -36,7 +36,7 @@ object BlockEventListener : Listener {
             try {
                 for (i in -1..9) {
                     val packet = PacketPlayOutBlockBreakAnimation(
-                        0,
+                        event.player.entityId + 1,
                         event.block.run { BlockPosition(x, y, z) },
                         i
                     )
@@ -64,7 +64,7 @@ object BlockEventListener : Listener {
                 }
             } finally {
                 val packet = PacketPlayOutBlockBreakAnimation(
-                    0,
+                    event.player.entityId + 1,
                     event.block.run { BlockPosition(x, y, z) },
                     -1
                 )
