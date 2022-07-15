@@ -1,6 +1,7 @@
 package net.aradiata.event
 
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.aradiata.PluginScope
@@ -32,32 +33,46 @@ object BlockEventListener : Listener {
         event.isCancelled = true
         event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_DIGGING, 1000000, -1, false, false))
         jobs[event.player.uniqueId] = PluginScope.launch {
-            for (i in -1..9) {
-                val packet = PacketPlayOutBlockBreakAnimation(
-                    0,
-                    BlockPosition(event.block.x, event.block.y, event.block.z),
-                    i
-                )
+            try {
+                for (i in -1..9) {
+                    val packet = PacketPlayOutBlockBreakAnimation(
+                        0,
+                        event.block.run { BlockPosition(x, y, z) },
+                        i
+                    )
+                    PluginScope.sync {
+                        event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }
+                            .forEach {
+                                (it as CraftPlayer).handle.b.a(packet)
+                            }
+                    }
+                    delay(100)
+                }
                 PluginScope.sync {
+                    val packet = PacketPlayOutWorldEvent(
+                        2001,
+                        event.block.run { BlockPosition(x, y, z) },
+                        Block.i((event.block as CraftBlock).nms),
+                        false
+                    )
                     event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }
                         .forEach {
                             (it as CraftPlayer).handle.b.a(packet)
                         }
+                    event.block.type = Material.AIR
+                    event.block.world.dropItemNaturally(event.block.location, ItemStack(Material.DIAMOND))
                 }
-                delay(100)
-            }
-            PluginScope.sync {
-                val packet = PacketPlayOutWorldEvent(
-                    2001,
-                    event.block.location.run { BlockPosition(x, y, z) },
-                    Block.i((event.block as CraftBlock).nms),
-                    false
+            } finally {
+                val packet = PacketPlayOutBlockBreakAnimation(
+                    0,
+                    event.block.run { BlockPosition(x, y, z) },
+                    -1
                 )
-                event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
-                    (it as CraftPlayer).handle.b.a(packet)
+                PluginScope.sync {
+                    event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
+                        (it as CraftPlayer).handle.b.a(packet)
+                    }
                 }
-                event.block.type = Material.AIR
-                event.block.world.dropItemNaturally(event.block.location, ItemStack(Material.DIAMOND))
             }
         }
     }
@@ -65,14 +80,6 @@ object BlockEventListener : Listener {
     @EventHandler
     fun onBlockDamageAbort(event: BlockDamageAbortEvent) {
         jobs[event.player.uniqueId]?.cancel()
-        val packet = PacketPlayOutBlockBreakAnimation(
-            0,
-            BlockPosition(event.block.x, event.block.y, event.block.z),
-            -1
-        )
-        event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
-            (it as CraftPlayer).handle.b.a(packet)
-        }
     }
     
 }
