@@ -1,7 +1,6 @@
 package net.aradiata.event
 
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.aradiata.PluginScope
@@ -9,8 +8,8 @@ import net.aradiata.plugin.sync
 import net.minecraft.core.BlockPosition
 import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation
 import net.minecraft.network.protocol.game.PacketPlayOutWorldEvent
-import net.minecraft.world.level.block.Block
 import org.bukkit.Material
+import org.bukkit.block.Block
 import org.bukkit.craftbukkit.v1_19_R1.block.CraftBlock
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
 import org.bukkit.entity.Player
@@ -32,54 +31,69 @@ object BlockEventListener : Listener {
         if (event.instaBreak) return
         event.isCancelled = true
         event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_DIGGING, 1000000, -1, false, false))
+
         jobs[event.player.uniqueId] = PluginScope.launch {
             try {
                 for (i in -1..9) {
-                    val packet = PacketPlayOutBlockBreakAnimation(
-                        event.player.entityId + 1,
-                        event.block.run { BlockPosition(x, y, z) },
-                        i
-                    )
-                    PluginScope.sync {
-                        event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }
-                            .forEach {
-                                (it as CraftPlayer).handle.b.a(packet)
-                            }
-                    }
+                    distributeBlockProgress(event.player, event.block, i)
+
                     delay(100)
                 }
                 PluginScope.sync {
-                    val packet = PacketPlayOutWorldEvent(
+                    val blockParticlePacket = PacketPlayOutWorldEvent(
                         2001,
                         event.block.run { BlockPosition(x, y, z) },
-                        Block.i((event.block as CraftBlock).nms),
+                        net.minecraft.world.level.block.Block.i((event.block as CraftBlock).nms),
                         false
                     )
+
                     event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }
                         .forEach {
-                            (it as CraftPlayer).handle.b.a(packet)
+                            (it as CraftPlayer).handle.b.a(blockParticlePacket)
                         }
                     event.block.type = Material.AIR
                     event.block.world.dropItemNaturally(event.block.location, ItemStack(Material.DIAMOND))
                 }
             } finally {
-                val packet = PacketPlayOutBlockBreakAnimation(
-                    event.player.entityId + 1,
-                    event.block.run { BlockPosition(x, y, z) },
-                    -1
-                )
-                PluginScope.sync {
-                    event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
-                        (it as CraftPlayer).handle.b.a(packet)
-                    }
-                }
+                distributeBlockProgress(event.player, event.block, -1)
             }
         }
     }
-    
+
+    // Send -1 to mining player to resolve conflicts
+    private fun distributeBlockProgress(player: Player, block: Block, progress: Int) {
+        val blockPos: BlockPosition = block.run { BlockPosition(x, y, z) }
+
+        val blockProgressPacket = PacketPlayOutBlockBreakAnimation(
+            player.entityId, blockPos, progress
+        )
+
+        PluginScope.sync {
+            block.world.getNearbyEntities(block.location, 32.0, 32.0, 32.0) { it is Player }
+                .forEach {
+                    (it as CraftPlayer).handle.b.a(
+                        when (it) {
+                            player -> PacketPlayOutBlockBreakAnimation(
+                                -1, blockPos, progress
+                            )
+                            else -> blockProgressPacket
+                        }
+                    )
+                }
+        }
+    }
+
     @EventHandler
     fun onBlockDamageAbort(event: BlockDamageAbortEvent) {
         jobs[event.player.uniqueId]?.cancel()
     }
+
+    /*
+    @EventHandler
+    fun onPickaxeSwap(event: PlayerItemHeldEvent) {
+        jobs[event.player.uniqueId]?.cancel()
+    }
+
+     */
     
 }
