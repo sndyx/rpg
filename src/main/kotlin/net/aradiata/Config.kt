@@ -1,4 +1,4 @@
-package newv.aradiata
+package net.aradiata
 
 object Config {
     

@@ -1,6 +1,7 @@
-package newv.aradiata.event
+package net.aradiata.event
 
-import newv.aradiata.plugin.async
+import kotlinx.coroutines.launch
+import net.aradiata.PluginScope
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -14,12 +15,12 @@ object ItemEventListener : Listener {
         if (event.item?.itemMeta?.hasCustomModelData() != true) return
         when (event.action) {
             Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> {
-                async {
+                PluginScope.launch {
                     // call event
                 }
             }
             Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> {
-                async {
+                PluginScope.launch {
                     // call event
                 }
             }

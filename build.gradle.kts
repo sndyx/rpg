@@ -10,8 +10,8 @@ group = "net.aradiata"
 version = "1.0-SNAPSHOT"
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 val shade: Configuration by configurations.creating {
@@ -27,7 +27,7 @@ dependencies {
     implementation(kotlin("script-runtime"))
     implementation(kotlinx("serialization-json", "1.3.2"))
     implementation(kotlinx("coroutines-core", "1.6.0"))
-    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
 }
 
 spigot {
@@ -67,6 +67,10 @@ tasks.withType<Jar> {
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
     
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().forEach {
+    it.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
 
 fun DependencyHandler.kotlinx(module: String, version: String): String = "org.jetbrains.kotlinx:kotlinx-$module:$version"

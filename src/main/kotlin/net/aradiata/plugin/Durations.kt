@@ -1,4 +1,4 @@
-package newv.aradiata.plugin
+package net.aradiata.plugin
 
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
