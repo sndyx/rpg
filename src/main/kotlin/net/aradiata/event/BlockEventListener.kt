@@ -7,18 +7,20 @@ import net.aradiata.PluginScope
 import net.aradiata.plugin.sync
 import net.minecraft.core.BlockPosition
 import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation
+import net.minecraft.network.protocol.game.PacketPlayOutWorldEvent
+import net.minecraft.world.level.block.Block
 import org.bukkit.Material
+import org.bukkit.craftbukkit.v1_19_R1.block.CraftBlock
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageAbortEvent
 import org.bukkit.event.block.BlockDamageEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.util.UUID
+import java.util.*
 
 object BlockEventListener : Listener {
     
@@ -36,10 +38,24 @@ object BlockEventListener : Listener {
                     BlockPosition(event.block.x, event.block.y, event.block.z),
                     i
                 )
-                (event.player as CraftPlayer).handle.b.a(packet)
-                delay(1000)
+                PluginScope.sync {
+                    event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }
+                        .forEach {
+                            (it as CraftPlayer).handle.b.a(packet)
+                        }
+                }
+                delay(100)
             }
             PluginScope.sync {
+                val packet = PacketPlayOutWorldEvent(
+                    2001,
+                    event.block.location.run { BlockPosition(x, y, z) },
+                    Block.i((event.block as CraftBlock).nms),
+                    false
+                )
+                event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
+                    (it as CraftPlayer).handle.b.a(packet)
+                }
                 event.block.type = Material.AIR
                 event.block.world.dropItemNaturally(event.block.location, ItemStack(Material.DIAMOND))
             }
@@ -54,7 +70,9 @@ object BlockEventListener : Listener {
             BlockPosition(event.block.x, event.block.y, event.block.z),
             -1
         )
-        (event.player as CraftPlayer).handle.b.a(packet)
+        event.block.world.getNearbyEntities(event.block.location, 32.0, 32.0, 32.0) { it is Player }.forEach {
+            (it as CraftPlayer).handle.b.a(packet)
+        }
     }
     
 }
