@@ -5,6 +5,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.aradiata.block.BlockData.Companion.rpgData
 import net.aradiata.PluginScope
+import net.aradiata.item.Item.Companion.toRpgItem
+import net.aradiata.item.Pickaxe
 import net.aradiata.plugin.sync
 import net.minecraft.core.BlockPosition
 import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation
@@ -36,11 +38,15 @@ object BlockEventListener : Listener {
         if (data.duration == Duration.ZERO) {
             breakBlock(event.block); return
         }
+        val pickaxe = event.itemInHand.toRpgItem() as? Pickaxe
+        val power = pickaxe?.power ?: 0
+        if (data.strength > power) return
+        val speed = ((pickaxe?.speed?.times(10) ?: 0) + 100) / 100.0f
         jobs[event.player.uniqueId] = PluginScope.launch {
             try {
                 for (i in -1..9) {
                     distributeBlockProgress(event.player, event.block, i)
-                    delay(data.duration.inWholeMilliseconds / 10)
+                    delay((data.duration.inWholeMilliseconds / (8 * speed)).toLong())
                 }
                 PluginScope.sync {
                     breakBlock(event.block)

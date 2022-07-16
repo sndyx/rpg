@@ -14,7 +14,8 @@ class BlockData(val strength: Int, val duration: Duration) {
     
         private val blocks = mapOf(
             Material.STONE to BlockData(0, 7.5.seconds),
-            Material.BEDROCK to BlockData(0, 3.seconds)
+            Material.BEDROCK to BlockData(0, 3.seconds),
+            Material.COAL_ORE to BlockData(10, 7.5.seconds)
         )
         
     }

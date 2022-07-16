@@ -3,9 +3,10 @@ package net.aradiata.plugin
 import net.aradiata.Config
 
 fun String.colored(): String =
-    replace(Regex("(?!(?:(\\\\){2})*\\\\)&([a-f\\d])")) { "§${it.groupValues[0]}" }
+    replace(Regex("&([0-9a-fA-Fkl-oL-OrKL-OR])"), "§$1")
 
-fun writeWrappingText(list: MutableList<String>, text: String) {
+
+fun MutableList<String>.addWrappingText(text: String) {
     val words = text.split(' ')
     var lastColor = 'f'
     var line = ""
@@ -22,15 +23,15 @@ fun writeWrappingText(list: MutableList<String>, text: String) {
             }
         }
         if (actualLength > Config.lineLength) {
-            list.add(line)
-            list.add("§$lastColor$word")
+            add(line)
+            add("§$lastColor$word")
         } else if (line.length + actualLength > Config.lineLength) {
-            list.add(line)
+            add(line)
             line = "§$lastColor$word "
         } else {
             line += "$word "
         }
         
     }
-    list.add(line)
+    add(line)
 }
