@@ -1,4 +1,4 @@
-package net.aradiata.event
+package net.aradiata.item
 
 import kotlinx.coroutines.launch
 import net.aradiata.PluginScope
