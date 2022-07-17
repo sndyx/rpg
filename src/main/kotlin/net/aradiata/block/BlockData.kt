@@ -20,7 +20,7 @@ class BlockData(val intent: ToolIntent, val strength: Int, val duration: Duratio
     
         private val blocks = mapOf(
             Material.TUFF to pickaxe(10, 7.5.seconds, EmptyBundle),
-            Material.BEDROCK to pickaxe(10, 3.seconds, EmptyBundle),
+            Material.BEDROCK to pickaxe(20, 4.seconds, EmptyBundle),
             Material.COAL_ORE to pickaxe(10, 7.5.seconds, Coal),
             Material.OAK_WOOD to axe(10, 5.seconds, OakWood),
             Material.GRASS to any(drops = GrassBundle),

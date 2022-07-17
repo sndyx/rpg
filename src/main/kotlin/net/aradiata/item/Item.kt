@@ -33,7 +33,8 @@ interface Item : Bundle {
             Fiber,
             Wheat,
             Coal,
-            OakWood
+            OakWood,
+            StonePickaxe
         ).associateBy { it.id }
         
     }
