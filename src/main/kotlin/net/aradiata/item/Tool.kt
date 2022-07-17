@@ -18,7 +18,7 @@ interface Tool: Item {
             speed > 20 -> "Very Slow"
             else -> "Extremely Slow"
         }
-        lore.add("&f$name Speed: &${rarity.colorCode}$speedDisplay".colored())
+        if (speed != 0) lore.add("&f$name Speed: &${rarity.colorCode}$speedDisplay".colored())
         if (dropIncrease != 0) lore.add("&fDrop Chance: &${rarity.colorCode}+$dropIncrease%".colored())
     }
 
