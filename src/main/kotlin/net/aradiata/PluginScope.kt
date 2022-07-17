@@ -4,6 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.newFixedThreadPoolContext
 import net.aradiata.block.BlockEventListener
+import net.aradiata.block.queue.DefaultRegenQueue
+import net.aradiata.block.queue.StoneRegenQueue
 import net.aradiata.command.ItemsCommand
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -26,6 +28,12 @@ class PluginScope : JavaPlugin() {
         getCommand("items")!!.setExecutor(ItemsCommand)
         Bukkit.getPluginManager().registerEvents(ItemsCommand, this)
         Bukkit.getPluginManager().registerEvents(BlockEventListener, this)
+        StoneRegenQueue.init()
+    }
+    
+    override fun onDisable() {
+        DefaultRegenQueue.regenAll()
+        StoneRegenQueue.regenAll()
     }
 
 }

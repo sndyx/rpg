@@ -13,4 +13,5 @@ object WoodenPickaxe : Pickaxe {
     
     override val power: Int = 10
     override val speed: Int = 40
+    
 }

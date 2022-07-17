@@ -5,6 +5,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.aradiata.block.BlockData.Companion.rpgData
 import net.aradiata.PluginScope
+import net.aradiata.block.queue.DefaultRegenQueue
+import net.aradiata.block.queue.StoneRegenQueue
 import net.aradiata.item.Axe
 import net.aradiata.item.Hoe
 import net.aradiata.item.Item
@@ -57,7 +59,7 @@ object BlockEventListener : Listener {
         if (power != null && data.strength > power) return
         if (data.intent != ToolIntent.Any && data.intent != ToolIntent.Hoe && tool == null) return
         if (data.duration == Duration.ZERO) {
-            breakBlock(event.block, tool); return
+            breakBlock(event.player, event.block, tool); return
         }
         jobs[event.player.uniqueId] = PluginScope.launch {
             try {
@@ -66,7 +68,7 @@ object BlockEventListener : Listener {
                     delay((data.duration.inWholeMilliseconds / (8 * speed)).toLong())
                 }
                 PluginScope.sync {
-                    breakBlock(event.block, tool)
+                    breakBlock(event.player, event.block, tool)
                 }
             } finally {
                 distributeBlockProgress(event.player, event.block, -1)
@@ -98,19 +100,28 @@ object BlockEventListener : Listener {
     }
     
     
-    private fun breakBlock(block: Block, tool: Item?) {
+    private fun breakBlock(player: Player, block: Block, tool: Item?) {
+        when (block.type) {
+            in DefaultRegenQueue.handled -> DefaultRegenQueue.queue(block)
+            in StoneRegenQueue.handled -> StoneRegenQueue.queue(block)
+            else -> { /* Ignore */
+            }
+        }
         val blockParticlePacket = PacketPlayOutWorldEvent(
             2001,
             block.run { BlockPosition(x, y, z) },
             net.minecraft.world.level.block.Block.i((block as CraftBlock).nms),
             false
         )
-        block.world.getNearbyEntities(block.location, 32.0, 32.0, 32.0) { it is Player }
-            .forEach {
-                (it as CraftPlayer).handle.b.a(blockParticlePacket)
-            }
+        block.world.getNearbyEntities(block.location, 32.0, 32.0, 32.0) {
+            if (block.rpgData!!.duration == Duration.ZERO) it is Player && it != player else it is Player // Prevent instabreak double particles
+        }.forEach {
+            (it as CraftPlayer).handle.b.a(blockParticlePacket)
+        }
+        block.rpgData!!.drops.next(tool).forEach {
+            block.world.dropItemNaturally(block.location, it.toItemStack())
+        }
         block.type = Material.AIR
-        block.world.dropItemNaturally(block.location, ItemStack(Material.DIAMOND))
     }
     
     @EventHandler

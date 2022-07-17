@@ -1,7 +1,6 @@
 package net.aradiata.item
 
-import net.aradiata.item.type.WoodenAxe
-import net.aradiata.item.type.WoodenPickaxe
+import net.aradiata.item.type.*
 import net.aradiata.plugin.addWrappingText
 import net.aradiata.plugin.colored
 import org.bukkit.Material
@@ -9,7 +8,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
-interface Item {
+interface Item : Bundle {
     
     val configId: String
     val id: Int
@@ -27,12 +26,19 @@ interface Item {
             }
         }
         
-        val registry: Map<Int, Item> = listOf<Item>(
+        val registry: Map<Int, Item> = listOf(
             WoodenPickaxe,
-            WoodenAxe
+            WoodenAxe,
+            WoodenHoe,
+            Fiber,
+            Wheat,
+            Coal,
+            OakWood
         ).associateBy { it.id }
         
     }
+    
+    override fun next(tool: Item?): List<Item> = listOf(this)
     
     fun toItemStack(): ItemStack {
         val item = ItemStack(Material.STICK, 1)
