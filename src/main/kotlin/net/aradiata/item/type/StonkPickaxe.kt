@@ -15,7 +15,7 @@ object StonkPickaxe : Pickaxe {
             " joke."
     
     override val power: Int = 20
-    override val speed: Int = 200
+    override val speed: Int = 400
     override val dropIncrease: Int = 1000
     
 }
