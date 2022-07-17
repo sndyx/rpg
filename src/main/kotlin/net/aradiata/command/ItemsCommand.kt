@@ -39,7 +39,7 @@ object ItemsCommand : CommandExecutor, Listener {
     }
     
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender is Player) {
+        if (sender is Player && sender.isOp) {
             sender.openInventory(itemMenus.first())
         }
         return true

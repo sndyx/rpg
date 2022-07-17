@@ -47,6 +47,12 @@ spigot {
             permissionMessage = "You do not have permission!"
             usage = "/items [reload |get <id>]"
         }
+        create("regenAll") {
+            description = "Regenerates all blocks"
+            permission = "none.lol"
+            permissionMessage = "You do not have permission!"
+            usage = "/items [reload |get <id>]"
+        }
     }
     permissions {
         create("aradiata.command.setrank") {

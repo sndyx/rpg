@@ -7,6 +7,7 @@ import net.aradiata.block.BlockEventListener
 import net.aradiata.block.queue.DefaultRegenQueue
 import net.aradiata.block.queue.StoneRegenQueue
 import net.aradiata.command.ItemsCommand
+import net.aradiata.command.RegenAllCommand
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.coroutines.CoroutineContext
@@ -26,6 +27,8 @@ class PluginScope : JavaPlugin() {
     override fun onEnable() {
         instance = this
         getCommand("items")!!.setExecutor(ItemsCommand)
+        getCommand("regenAll")!!.setExecutor(RegenAllCommand)
+
         Bukkit.getPluginManager().registerEvents(ItemsCommand, this)
         Bukkit.getPluginManager().registerEvents(BlockEventListener, this)
         StoneRegenQueue.init()

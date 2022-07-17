@@ -13,6 +13,6 @@ object StonePickaxe : Pickaxe {
 
     override val power: Int = 20
     override val speed: Int = 50
-    override val dropIncrease: Int = 0
+    override val dropIncrease: Int = 690
 
 }
