@@ -7,7 +7,6 @@ import net.aradiata.block.BlockData.Companion.rpgData
 import net.aradiata.PluginScope
 import net.aradiata.item.Item.Companion.toRpgItem
 import net.aradiata.item.Pickaxe
-import net.aradiata.item.enchants.CustomFortune
 import net.aradiata.plugin.sync
 import net.minecraft.core.BlockPosition
 import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation
@@ -36,13 +35,10 @@ object BlockEventListener : Listener {
         event.isCancelled = true
         event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_DIGGING, 1000000, -1, false, false))
         val data = event.block.rpgData ?: return
-        val tool = event.itemInHand
-        val pickaxe = tool.toRpgItem() as? Pickaxe
-
         if (data.duration == Duration.ZERO) {
-            breakBlock(event.block, tool)
-            return
+            breakBlock(event.block); return
         }
+        val pickaxe = event.itemInHand.toRpgItem() as? Pickaxe
         val power = pickaxe?.power ?: 0
         if (data.strength > power) return
         val speed = ((pickaxe?.speed?.times(10) ?: 0) + 100) / 100.0f
@@ -53,7 +49,7 @@ object BlockEventListener : Listener {
                     delay((data.duration.inWholeMilliseconds / (8 * speed)).toLong())
                 }
                 PluginScope.sync {
-                    breakBlock(event.block, tool)
+                    breakBlock(event.block)
                 }
             } finally {
                 distributeBlockProgress(event.player, event.block, -1)
@@ -85,7 +81,7 @@ object BlockEventListener : Listener {
     }
     
     
-    private fun breakBlock(block: Block, tool: ItemStack) {
+    private fun breakBlock(block: Block) {
         val blockParticlePacket = PacketPlayOutWorldEvent(
             2001,
             block.run { BlockPosition(x, y, z) },
@@ -97,14 +93,7 @@ object BlockEventListener : Listener {
                 (it as CraftPlayer).handle.b.a(blockParticlePacket)
             }
         block.type = Material.AIR
-
-        if (tool.itemMeta?.hasEnchant(CustomFortune) == true) {
-            block.world.dropItemNaturally(block.location, ItemStack(Material.DIAMOND,
-                tool.itemMeta?.getEnchantLevel(CustomFortune)!!
-            ))
-        } else {
-            block.world.dropItemNaturally(block.location, ItemStack(Material.COAL))
-        }
+        block.world.dropItemNaturally(block.location, ItemStack(Material.DIAMOND))
     }
     
     @EventHandler

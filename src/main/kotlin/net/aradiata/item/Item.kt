@@ -1,10 +1,8 @@
 package net.aradiata.item
 
-import net.aradiata.item.enchants.CustomEnchant
 import net.aradiata.item.type.WoodenPickaxe
 import net.aradiata.plugin.addWrappingText
 import net.aradiata.plugin.colored
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -17,8 +15,6 @@ interface Item {
     val name: String
     val rarity: Rarity
     val description: String?
-
-    val baseEnchants: Map<CustomEnchant, Int>?
     
     fun writeDetails(lore: MutableList<String>)
     
@@ -33,6 +29,7 @@ interface Item {
         val registry: Map<Int, Item> = listOf<Item>(
             WoodenPickaxe
         ).associateBy { it.id }
+        
     }
     
     fun toItemStack(): ItemStack {
@@ -42,20 +39,11 @@ interface Item {
         item.itemMeta = meta // Not a reference for whatever godforsaken reason
         return item
     }
-
-
+    
     fun sync(data: ItemMeta) {
         data.setDisplayName("&${rarity.colorCode}$name".colored())
-
         val lore = mutableListOf<String>()
         lore.add("")
-
-        baseEnchants?.forEach {
-            data.addEnchant(it.key, it.value, true)
-
-            lore.add("${ChatColor.RESET}${ChatColor.GRAY}${it.key.getEnchantName(it.value)}")
-        }
-
         writeDetails(lore)
         if (lore.size == 1) lore.removeAt(0)
         if (description != null) {
