@@ -110,7 +110,7 @@ object BlockEventListener : Listener {
     
     private fun breakBlock(player: Player, block: Block, tool: Tool) {
         if (block.isWood()) {
-            breakTree(player, block, tool, true)
+            breakTree(player, block, tool)
             return
         }
         
@@ -128,58 +128,54 @@ object BlockEventListener : Listener {
         block.type = Material.AIR
     }
     
-    private fun breakTree(player: Player, block: Block, tool: Tool, isRoot: Boolean) {
-        val neighbors = buildList<Block> {
-            for (x in -1..1) {
-                for (z in -1..1) {
-                    for (y in 0..1) {
-                        if (x == 0 && z == 0 && y == 0) continue
-                        block.getRelative(x, y, z)
-                    }
-                }
+    private fun breakTree(player: Player, block: Block, tool: Tool) {
+        val wood = findWood(block, mutableSetOf(block))
+        wood.forEach {
+            distributeBlockBreak(player, it)
+            it.rpgData!!.drops.next(tool).forEach { item ->
+                it.world.dropItemNaturally(it.location, item.toItemStack())
             }
+            it.type = Material.AIR
         }
-        neighbors.forEach {
-            if (it.isWood()) {
-                breakTree(player, block, tool, false)
+        val leaves = wood.map { findLeaves(it, mutableSetOf()) }.flatten()
+        leaves.forEach {
+            it.rpgData!!.drops.next(tool).forEach { item ->
+                it.world.dropItemNaturally(it.location, item.toItemStack())
             }
-        }
-        DefaultRegenQueue.queue(block)
-        if (isRoot) distributeBlockBreak(player, block)
-        block.rpgData!!.drops.next(tool).forEach { item ->
-            block.world.dropItemNaturally(block.location, item.toItemStack())
-        }
-        block.type = Material.AIR
-        neighbors.forEach {
-            breakLeaves(it, tool)
+            it.type = Material.AIR
         }
     }
     
-    private fun breakLeaves(block: Block, tool: Tool) {
-        val neighbors = buildList<Block> {
-            for (x in -1..1) {
+    private fun findWood(block: Block, set: MutableSet<Block>): Set<Block> {
+        for (x in -1..1) {
+            for (y in 0..1) {
                 for (z in -1..1) {
-                    for (y in -1..1) {
-                        if (x == 0 && z == 0 && y == 0) continue
-                        block.getRelative(x, y, z)
+                    val relative = block.getRelative(x, y, z)
+                    if (!relative.isWood()) continue
+                    if (!set.contains(relative)) {
+                        set.add(relative)
+                        findWood(relative, set)
                     }
                 }
             }
         }
-        if (neighbors.none { it.isWood() }) {
-            if (block.type != Material.AIR) {
-                DefaultRegenQueue.queue(block)
-                block.rpgData!!.drops.next(tool).forEach { item ->
-                    block.world.dropItemNaturally(block.location, item.toItemStack())
-                }
-                block.type = Material.AIR
-            }
-            neighbors.forEach {
-                if (it.isLeaves()) {
-                    breakLeaves(it, tool)
+        return set
+    }
+    
+    private fun findLeaves(block: Block, set: MutableSet<Block>): Set<Block> {
+        for (x in -1..1) {
+            for (y in -1..1) {
+                for (z in -1..1) {
+                    val relative = block.getRelative(x, y, z)
+                    if (!relative.isLeaves()) continue
+                    if (!set.contains(relative)) {
+                        set.add(relative)
+                        findLeaves(relative, set)
+                    }
                 }
             }
         }
+        return set
     }
     
     private fun Block.isWood(): Boolean {
