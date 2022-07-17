@@ -109,11 +109,15 @@ object BlockEventListener : Listener {
     }
     
     private fun breakBlock(player: Player, block: Block, tool: Tool) {
+        if (block.isWood()) {
+            breakTree(player, block, tool, true)
+            return
+        }
+        
         when (block.type) {
             in DefaultRegenQueue.handled -> DefaultRegenQueue.queue(block)
             in StoneRegenQueue.handled -> StoneRegenQueue.queue(block)
-            else -> { /* Ignore */
-            }
+            else -> { /* Ignore */ }
         }
 
         distributeBlockBreak(player, block)
@@ -122,6 +126,74 @@ object BlockEventListener : Listener {
             block.world.dropItemNaturally(block.location, it.toItemStack())
         }
         block.type = Material.AIR
+    }
+    
+    private fun breakTree(player: Player, block: Block, tool: Tool, isRoot: Boolean) {
+        val neighbors = buildList<Block> {
+            for (x in -1..1) {
+                for (z in -1..1) {
+                    for (y in 0..1) {
+                        if (x == 0 && z == 0 && y == 0) continue
+                        block.getRelative(x, y, z)
+                    }
+                }
+            }
+        }
+        neighbors.forEach {
+            if (it.isWood()) {
+                breakTree(player, block, tool, false)
+            }
+        }
+        DefaultRegenQueue.queue(block)
+        if (isRoot) distributeBlockBreak(player, block)
+        block.rpgData!!.drops.next(tool).forEach { item ->
+            block.world.dropItemNaturally(block.location, item.toItemStack())
+        }
+        block.type = Material.AIR
+        neighbors.forEach {
+            breakLeaves(it, tool)
+        }
+    }
+    
+    private fun breakLeaves(block: Block, tool: Tool) {
+        val neighbors = buildList<Block> {
+            for (x in -1..1) {
+                for (z in -1..1) {
+                    for (y in -1..1) {
+                        if (x == 0 && z == 0 && y == 0) continue
+                        block.getRelative(x, y, z)
+                    }
+                }
+            }
+        }
+        if (neighbors.none { it.isWood() }) {
+            if (block.type != Material.AIR) {
+                DefaultRegenQueue.queue(block)
+                block.rpgData!!.drops.next(tool).forEach { item ->
+                    block.world.dropItemNaturally(block.location, item.toItemStack())
+                }
+                block.type = Material.AIR
+            }
+            neighbors.forEach {
+                if (it.isLeaves()) {
+                    breakLeaves(it, tool)
+                }
+            }
+        }
+    }
+    
+    private fun Block.isWood(): Boolean {
+        return when (type) {
+            Material.OAK_WOOD, Material.BIRCH_WOOD, Material.DARK_OAK_WOOD, Material.ACACIA_WOOD, Material.MANGROVE_WOOD, Material.SPRUCE_WOOD, Material.JUNGLE_WOOD -> true
+            else -> false
+        }
+    }
+    
+    private fun Block.isLeaves(): Boolean {
+        return when (type) {
+            Material.OAK_LEAVES, Material.BIRCH_LEAVES, Material.DARK_OAK_LEAVES, Material.ACACIA_LEAVES, Material.MANGROVE_LEAVES, Material.SPRUCE_LEAVES, Material.JUNGLE_LEAVES, Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES -> true
+            else -> false
+        }
     }
     
     @EventHandler
