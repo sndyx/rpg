@@ -9,10 +9,10 @@ object StonePickaxe : Pickaxe {
     override val id: Int = 8
     override val name: String = "Stone Pickaxe"
     override val rarity: Rarity = Rarity.Uncommon
-    override val description: String? = "STONE STONE STONE"
+    override val description: String = "STONE STONE STONE"
 
     override val power: Int = 20
     override val speed: Int = 50
-    override val dropIncrease: Int = 690
+    override val dropIncrease: Int = 0
 
 }
