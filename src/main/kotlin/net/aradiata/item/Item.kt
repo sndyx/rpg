@@ -38,7 +38,7 @@ interface Item : Bundle {
         
     }
     
-    override fun next(tool: Item?): List<Item> = listOf(this)
+    override fun next(tool: Tool): List<Item> = listOf(this)
     
     fun toItemStack(): ItemStack {
         val item = ItemStack(Material.STICK, 1)

@@ -10,7 +10,9 @@ object WoodenHoe : Hoe {
     override val name: String = "Wooden Hoe"
     override val rarity: Rarity = Rarity.Common
     override val description: String? = null
-    
+
+    override val power: Int = 0
+    override val speed: Int = 0
     override val dropIncrease: Int = 20
-    
+
 }

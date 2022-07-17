@@ -13,5 +13,5 @@ object WoodenAxe : Axe {
     
     override val power: Int = 10
     override val speed: Int = 40
-    
+    override val dropIncrease: Int = 0
 }
