@@ -39,7 +39,11 @@ interface Item : Bundle {
         
     }
     
-    override fun next(tool: Tool): List<Item> = listOf(this)
+    override fun next(tool: Tool): List<Item> = buildList {
+        chance(100.0, tool) { add(this@Item) }
+    }
+
+    override fun chanceIncrease(tool: Tool): Int = tool.dropIncrease
     
     fun toItemStack(): ItemStack {
         val item = ItemStack(Material.STICK, 1)
