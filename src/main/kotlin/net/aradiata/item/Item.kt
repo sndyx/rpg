@@ -1,5 +1,6 @@
 package net.aradiata.item
 
+import net.aradiata.item.type.WoodenAxe
 import net.aradiata.item.type.WoodenPickaxe
 import net.aradiata.plugin.addWrappingText
 import net.aradiata.plugin.colored
@@ -27,7 +28,8 @@ interface Item {
         }
         
         val registry: Map<Int, Item> = listOf<Item>(
-            WoodenPickaxe
+            WoodenPickaxe,
+            WoodenAxe
         ).associateBy { it.id }
         
     }
