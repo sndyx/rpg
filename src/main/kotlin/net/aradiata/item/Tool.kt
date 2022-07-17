@@ -8,7 +8,7 @@ interface Tool: Item {
     val dropIncrease: Int
 
     fun buildToolLore(lore: MutableList<String>, name: String) {
-        lore.add("&f$name Power: &${rarity.colorCode}+$power".colored())
+        if (name != "Hoe") lore.add("&f$name Power: &${rarity.colorCode}+$power".colored())
         val speedDisplay: String = when {
             speed > 480 -> "Insanely Fast"
             speed > 360 -> "Very Fast"
@@ -18,7 +18,7 @@ interface Tool: Item {
             speed > 20 -> "Very Slow"
             else -> "Extremely Slow"
         }
-        if (speed != 0) lore.add("&f$name Speed: &${rarity.colorCode}$speedDisplay".colored())
+        if (name != "Hoe") lore.add("&f$name Speed: &${rarity.colorCode}$speedDisplay".colored())
         if (dropIncrease != 0) lore.add("&fDrop Chance: &${rarity.colorCode}+$dropIncrease%".colored())
     }
 
