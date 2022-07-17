@@ -6,7 +6,7 @@ enum class Rarity(val colorCode: Char) {
     Uncommon('a'),
     Rare('9'),
     Epic('5'),
-    Legendary('e'),
+    Legendary('6'),
     Divine('d');
     
 }
