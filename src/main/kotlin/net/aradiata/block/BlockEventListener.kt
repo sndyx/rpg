@@ -25,6 +25,7 @@ import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
+import kotlin.collections.ArrayDeque
 import kotlin.time.Duration
 
 object BlockEventListener : Listener {
@@ -129,53 +130,114 @@ object BlockEventListener : Listener {
     }
     
     private fun breakTree(player: Player, block: Block, tool: Tool) {
-        val wood = findWood(block, mutableSetOf(block))
-        wood.forEach {
-            distributeBlockBreak(player, it)
-            it.rpgData!!.drops.next(tool).forEach { item ->
-                it.world.dropItemNaturally(it.location, item.toItemStack())
+        val wood = findWood(block)
+        PluginScope.launch {
+            wood.groupBy { it.y }.toSortedMap().forEach { group ->
+                PluginScope.sync {
+                    group.value.forEach {
+                        DefaultRegenQueue.queue(it)
+                        distributeBlockBreak(player, it)
+                        it.rpgData!!.drops.next(tool).forEach { item ->
+                            it.world.dropItemNaturally(it.location, item.toItemStack())
+                        }
+                        it.type = Material.AIR
+                    }
+                }
+                delay(20)
             }
-            it.type = Material.AIR
-        }
-        val leaves = wood.map { findLeaves(it, mutableSetOf()) }.flatten()
-        leaves.forEach {
-            it.rpgData!!.drops.next(tool).forEach { item ->
-                it.world.dropItemNaturally(it.location, item.toItemStack())
+            val leaves = findLeaves(wood)
+            leaves.forEach {
+                PluginScope.sync {
+                    DefaultRegenQueue.queue(it)
+                    it.rpgData!!.drops.next(tool).forEach { item ->
+                        it.world.dropItemNaturally(it.location, item.toItemStack())
+                    }
+                    it.type = Material.AIR
+                }
+                delay((1000 / leaves.size).toLong())
             }
-            it.type = Material.AIR
         }
     }
     
-    private fun findWood(block: Block, set: MutableSet<Block>): Set<Block> {
-        for (x in -1..1) {
-            for (y in 0..1) {
+    private fun findWood(block: Block): Set<Block> {
+        val wood = mutableSetOf(block)
+        val blocks = ArrayDeque<Block>().apply { add(block) }
+        
+        // find base
+        while (blocks.isNotEmpty()) {
+            val current = blocks.removeFirst()
+            for (x in -1..1) {
                 for (z in -1..1) {
-                    val relative = block.getRelative(x, y, z)
-                    if (!relative.isWood()) continue
-                    if (!set.contains(relative)) {
-                        set.add(relative)
-                        findWood(relative, set)
+                    val relative = current.getRelative(x, 0, z)
+                    if (relative.isWood() && !wood.contains(relative)) {
+                        blocks.add(relative)
+                        wood.add(relative)
                     }
                 }
             }
         }
-        return set
+        
+        // find vertical neighbors
+        wood.forEach { current ->
+            for (x in -1..1) {
+                for (z in -1..1) {
+                    val relative = current.getRelative(x, 1, z)
+                    if (relative.isWood()) blocks.add(relative)
+                }
+            }
+        }
+        
+        // follow path
+        while (blocks.isNotEmpty()) {
+            val current = blocks.removeFirst()
+            for (x in -1..1) {
+                for (y in -1..1) {
+                    for (z in -1..1) {
+                        val relative = current.getRelative(x, y, z)
+                        if (relative.isWood() && !wood.contains(relative)) {
+                            blocks.add(relative)
+                            wood.add(relative)
+                        }
+                    }
+                }
+            }
+        }
+        
+        return wood
     }
     
-    private fun findLeaves(block: Block, set: MutableSet<Block>): Set<Block> {
+    private fun findLeaves(wood: Set<Block>): Set<Block> {
+        val leaves = mutableSetOf<Block>()
+        val blocks = ArrayDeque<Block>().apply { addAll(wood) }
+        
+        while (blocks.isNotEmpty()) {
+            val current = blocks.removeFirst()
+            for (x in -1..1) {
+                for (y in -1..1) {
+                    for (z in -1..1) {
+                        val relative = current.getRelative(x, y, z)
+                        if (relative.isLeaves() && !leaves.contains(relative) && !relative.isNextToWood()) {
+                            blocks.add(relative)
+                            leaves.add(relative)
+                        }
+                    }
+                }
+            }
+        }
+        
+        return leaves
+    }
+    
+    private fun Block.isNextToWood(): Boolean {
         for (x in -1..1) {
             for (y in -1..1) {
                 for (z in -1..1) {
-                    val relative = block.getRelative(x, y, z)
-                    if (!relative.isLeaves()) continue
-                    if (!set.contains(relative)) {
-                        set.add(relative)
-                        findLeaves(relative, set)
-                    }
+                    val relative = getRelative(x, y, z)
+                    if (relative.isWood()) return true
                 }
             }
         }
-        return set
+        return false
     }
     
     private fun Block.isWood(): Boolean {

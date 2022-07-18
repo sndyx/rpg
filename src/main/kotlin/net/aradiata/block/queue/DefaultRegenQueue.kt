@@ -27,6 +27,7 @@ object DefaultRegenQueue: BlockRegenQueue {
     
     override fun regenAll() {
         blocks.forEach { it.update(true) }
+        blocks.clear()
     }
     
 }

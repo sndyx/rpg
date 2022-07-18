@@ -31,6 +31,7 @@ class BlockData(val intent: ToolIntent, val strength: Int, val duration: Duratio
             Material.JUNGLE_WOOD to axe(10, 5.seconds, OakWood),
             Material.OAK_LEAVES to any(1.seconds, EmptyBundle),
             Material.SPRUCE_LEAVES to any(1.seconds, EmptyBundle),
+            Material.BIRCH_LEAVES to any(1.seconds, EmptyBundle),
             Material.DARK_OAK_LEAVES to any(1.seconds, EmptyBundle),
             Material.MANGROVE_LEAVES to any(1.seconds, EmptyBundle),
             Material.ACACIA_LEAVES to any(1.seconds, EmptyBundle),
