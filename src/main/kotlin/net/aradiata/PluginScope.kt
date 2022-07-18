@@ -2,6 +2,7 @@ package net.aradiata
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.newFixedThreadPoolContext
 import net.aradiata.block.BlockEventListener
 import net.aradiata.block.queue.DefaultRegenQueue
@@ -37,6 +38,7 @@ class PluginScope : JavaPlugin() {
     override fun onDisable() {
         DefaultRegenQueue.regenAll()
         StoneRegenQueue.regenAll()
+        cancel()
     }
 
 }

@@ -5,7 +5,7 @@ import net.aradiata.item.Item
 import net.aradiata.item.Tool
 import net.aradiata.item.type.Fiber
 
-object GrassBundle : Bundle {
+object PlantBundle : Bundle {
     
     override fun chanceIncrease(tool: Tool): Int = tool.dropIncrease
     

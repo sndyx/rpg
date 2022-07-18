@@ -161,29 +161,22 @@ object BlockEventListener : Listener {
     
     private fun findWood(block: Block): Set<Block> {
         val wood = mutableSetOf(block)
-        val blocks = ArrayDeque<Block>().apply { add(block) }
+        val blocks = ArrayDeque<Block>()
         
-        // find base
-        while (blocks.isNotEmpty()) {
-            val current = blocks.removeFirst()
-            for (x in -1..1) {
-                for (z in -1..1) {
-                    val relative = current.getRelative(x, 0, z)
-                    if (relative.isWood() && !wood.contains(relative)) {
-                        blocks.add(relative)
-                        wood.add(relative)
-                    }
-                }
+        // ensure cut base
+        for (x in -1..1) {
+            for (z in -1..1) {
+                if (x == 0 && z == 0) continue
+                val relative = block.getRelative(x, 0, z)
+                if (relative.isWood()) return wood
             }
         }
         
         // find vertical neighbors
-        wood.forEach { current ->
-            for (x in -1..1) {
-                for (z in -1..1) {
-                    val relative = current.getRelative(x, 1, z)
-                    if (relative.isWood()) blocks.add(relative)
-                }
+        for (x in -1..1) {
+            for (z in -1..1) {
+                val relative = block.getRelative(x, 1, z)
+                if (relative.isWood()) blocks.add(relative)
             }
         }
         

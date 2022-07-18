@@ -2,7 +2,7 @@ package net.aradiata.block
 
 import net.aradiata.item.Bundle
 import net.aradiata.item.bundle.EmptyBundle
-import net.aradiata.item.bundle.GrassBundle
+import net.aradiata.item.bundle.PlantBundle
 import net.aradiata.item.bundle.WheatBundle
 import net.aradiata.item.type.Coal
 import net.aradiata.item.type.OakWood
@@ -29,16 +29,16 @@ class BlockData(val intent: ToolIntent, val strength: Int, val duration: Duratio
             Material.ACACIA_WOOD to axe(10, 5.seconds, OakWood),
             Material.BIRCH_WOOD to axe(10, 5.seconds, OakWood),
             Material.JUNGLE_WOOD to axe(10, 5.seconds, OakWood),
-            Material.OAK_LEAVES to any(1.seconds, EmptyBundle),
-            Material.SPRUCE_LEAVES to any(1.seconds, EmptyBundle),
-            Material.BIRCH_LEAVES to any(1.seconds, EmptyBundle),
-            Material.DARK_OAK_LEAVES to any(1.seconds, EmptyBundle),
-            Material.MANGROVE_LEAVES to any(1.seconds, EmptyBundle),
-            Material.ACACIA_LEAVES to any(1.seconds, EmptyBundle),
-            Material.JUNGLE_LEAVES to any(1.seconds, EmptyBundle),
-            Material.AZALEA_LEAVES to any(1.seconds, EmptyBundle),
-            Material.FLOWERING_AZALEA_LEAVES to any(1.seconds, EmptyBundle),
-            Material.GRASS to any(drops = GrassBundle),
+            Material.OAK_LEAVES to any(1.seconds, PlantBundle),
+            Material.SPRUCE_LEAVES to any(1.seconds, PlantBundle),
+            Material.BIRCH_LEAVES to any(1.seconds, PlantBundle),
+            Material.DARK_OAK_LEAVES to any(1.seconds, PlantBundle),
+            Material.MANGROVE_LEAVES to any(1.seconds, PlantBundle),
+            Material.ACACIA_LEAVES to any(1.seconds, PlantBundle),
+            Material.JUNGLE_LEAVES to any(1.seconds, PlantBundle),
+            Material.AZALEA_LEAVES to any(1.seconds, PlantBundle),
+            Material.FLOWERING_AZALEA_LEAVES to any(1.seconds, PlantBundle),
+            Material.GRASS to any(drops = PlantBundle),
             Material.WHEAT to hoe(drops = WheatBundle),
         )
         
