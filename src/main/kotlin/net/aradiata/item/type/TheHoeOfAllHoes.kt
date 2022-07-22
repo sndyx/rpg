@@ -7,11 +7,11 @@ object TheHoeOfAllHoes : Hoe {
 
     override val configId: String = "the_hoe_of_all_hoes"
     override val id: Int = 10
-    override val name: String = "Wooden Hoe"
+    override val name: String = "The Hoe of all Hoes"
     override val rarity: Rarity = Rarity.Divine
-    override val description: String? = "Keeping up with Kardashians"
+    override val description: String = "Keeping up with Kardashians"
 
     override val power: Int = 0
     override val speed: Int = 0
-    override val dropIncrease: Int = 20
+    override val dropIncrease: Int = 10000
 }
