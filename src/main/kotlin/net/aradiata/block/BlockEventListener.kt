@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageAbortEvent
 import org.bukkit.event.block.BlockDamageEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.util.*
@@ -31,11 +32,15 @@ import kotlin.time.Duration
 object BlockEventListener : Listener {
     
     private val jobs = mutableMapOf<UUID, Job>()
+
+    @EventHandler
+    fun onJoin(event: PlayerJoinEvent) {
+        event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_DIGGING, 1000000, -1, false, false))
+    }
     
     @EventHandler
     fun onBlockDamage(event: BlockDamageEvent) {
         event.isCancelled = true
-        event.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW_DIGGING, 1000000, -1, false, false))
         val data = event.block.rpgData ?: return
 
         val tool: Tool = (when (data.intent) {

@@ -35,7 +35,8 @@ interface Item : Bundle {
             Coal,
             OakWood,
             StonePickaxe,
-            StonkPickaxe
+            StonkPickaxe,
+            TheHoeOfAllHoes
         ).associateBy { it.id }
         
     }
