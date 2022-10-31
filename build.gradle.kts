@@ -1,13 +1,13 @@
-import kr.entree.spigradle.attribute.Load
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
-    kotlin("plugin.serialization") version "1.6.10"
-    id("kr.entree.spigradle") version "1.2.4"
+    kotlin("jvm") version "1.7.10"
+    kotlin("plugin.serialization") version "1.7.10"
+    id("kr.entree.spigradle") version "2.4.2"
 }
 
 group = "net.aradiata"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenLocal()
@@ -21,62 +21,30 @@ val shade: Configuration by configurations.creating {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
-    implementation(kotlin("scripting-common"))
+    implementation(kotlin("script-runtime"))
     implementation(kotlin("scripting-jvm"))
     implementation(kotlin("scripting-jvm-host"))
-    implementation(kotlin("script-runtime"))
-    implementation(kotlinx("serialization-json", "1.3.2"))
-    implementation(kotlinx("coroutines-core", "1.6.0"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
 }
 
 spigot {
     authors = listOf("sndy")
     apiVersion = "1.19"
-    load = Load.STARTUP
-    commands {
-        create("setrank") {
-            description = "Sets a player's rank"
-            permission = "aradiata.command.setrank"
-            permissionMessage = "You do not have permission!"
-            usage = "/setrank <player> <rank>"
-        }
-        create("items") {
-            description = "gives u an item lol"
-            permission = "none.lol"
-            permissionMessage = "You do not have permission!"
-            usage = "/items [reload |get <id>]"
-        }
-        create("regenAll") {
-            description = "Regenerates all blocks"
-            permission = "none.lol"
-            permissionMessage = "You do not have permission!"
-            usage = "/items [reload |get <id>]"
-        }
-    }
-    permissions {
-        create("aradiata.command.setrank") {
-            description = "Allows player to set ranks."
-            defaults = "false"
-        }
-    }
 }
 
 tasks.withType<Jar> {
-    
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    
     from(sourceSets.main.get().output)
-    
     dependsOn(configurations.runtimeClasspath)
     from ({
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
-    
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().forEach {
-    it.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+tasks.withType<KotlinCompile>().forEach {
+    it.kotlinOptions.freeCompilerArgs = listOf(
+        "-opt-in=kotlin.RequiresOptIn"
+    )
 }
-
-fun DependencyHandler.kotlinx(module: String, version: String): String = "org.jetbrains.kotlinx:kotlinx-$module:$version"

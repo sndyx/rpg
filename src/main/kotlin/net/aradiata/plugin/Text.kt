@@ -1,37 +1,28 @@
 package net.aradiata.plugin
 
-import net.aradiata.Config
-
 fun String.colored(): String =
     replace(Regex("&([0-9a-fA-Fkl-oL-OrKL-OR])"), "§$1")
 
-
-fun MutableList<String>.addWrappingText(text: String) {
-    val words = text.split(' ')
-    var lastColor = 'f'
-    var line = ""
-    words.forEach { word ->
-        var i = 0
-        var actualLength = 0
-        while (i < word.length) {
-            if (word[i] == '§') {
-                lastColor = word[i + 1]
-                i += 2
-            } else {
-                actualLength++
-                i++
-            }
-        }
-        if (actualLength > Config.lineLength) {
-            add(line)
-            add("§$lastColor$word")
-        } else if (line.length + actualLength > Config.lineLength) {
-            add(line)
-            line = "§$lastColor$word "
-        } else {
-            line += "$word "
-        }
-        
+fun manaBar(mana: Int): String {
+    val builder = StringBuilder("\uE001")
+    builder.append(when (mana) {
+        0 -> '\uE105'
+        1 -> '\uE104'
+        else -> '\uE103'
+    }).append("\uE000")
+    repeat(mana / 2 - 1) {
+        builder.append('\uE100').append('\uE000')
     }
-    add(line)
+    when (mana) {
+        20 -> builder.append('\uE106').append('\uE000')
+        19 -> builder.append('\uE107').append('\uE000')
+        else -> {
+            if (mana % 2 == 1) builder.append('\uE101').append("\uE000")
+            repeat((20 - mana) / 2 - if (mana == 0) 2 else 1) {
+                builder.append('\uE102').append('\uE000')
+            }
+            builder.append('\uE108')
+        }
+    }
+    return builder.toString()
 }
