@@ -1,0 +1,11 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/emerald"
+    },
+    "overrides": [
+        { "predicate": {"custom_model_data": 1 }, "model": "addon:charm/dash_master" },
+        { "predicate": {"custom_model_data": 2 }, "model": "addon:charm/soul_gild" },
+        { "predicate": {"custom_model_data": 3 }, "model": "addon:charm/wayward_compass" }
+    ]
+}
