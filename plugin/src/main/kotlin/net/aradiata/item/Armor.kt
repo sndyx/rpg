@@ -53,6 +53,7 @@ enum class ArmorStatType(val isPrimary: Boolean, val displayName: String) {
     Ranged(true, "Ranged Damage"),
     
     Health(false, "Health"),
+    Defense(false, "Defense"),
     Mana(false, "Mana"),
     Speed(false, "Speed"),
     AttackSpeed(false, "Attack Speed"),

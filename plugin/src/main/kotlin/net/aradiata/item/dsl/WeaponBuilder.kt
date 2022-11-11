@@ -1,17 +1,20 @@
-package net.aradiata.script
+package net.aradiata.item.dsl
 
 import net.aradiata.item.*
 
+fun weapon(id: String, builder: WeaponBuilder.() -> Unit) =
+    WeaponBuilder(id).apply(builder).build()
+
 @ItemDsl
-class WeaponFile : ItemFile<Weapon>() {
+class WeaponBuilder(id: String) : ItemBuilder<Weapon>(id) {
     
     private var suppressMeleeDamage: Boolean = false
     fun suppressMeleeDamage() { suppressMeleeDamage = true }
     
     private val stats: MutableList<WeaponStat> = mutableListOf()
-    fun stats(builder: MutableList<WeaponStat>.() -> Unit) = buildList(builder)
+    fun stats(builder: MutableList<WeaponStat>.() -> Unit) = stats.addAll(buildList(builder))
     
-    override fun build(id: String) = Weapon(
+    override fun build() = Weapon(
         id, model!!, name!!, rarity!!, description, events, stats, suppressMeleeDamage
     )
     

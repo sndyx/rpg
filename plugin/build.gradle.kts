@@ -20,10 +20,6 @@ val shade: Configuration by configurations.creating {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(kotlin("reflect"))
-    implementation(kotlin("script-runtime"))
-    implementation(kotlin("scripting-jvm"))
-    implementation(kotlin("scripting-jvm-host"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")

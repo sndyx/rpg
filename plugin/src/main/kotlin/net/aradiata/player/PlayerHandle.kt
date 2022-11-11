@@ -1,14 +1,24 @@
 package net.aradiata.player
 
+import kotlinx.coroutines.Job
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import net.aradiata.Plugin
 import net.aradiata.item.ItemData
 import net.aradiata.item.ItemRegistry
+import net.aradiata.plugin.manaBar
+import net.aradiata.plugin.scheduleEvery
+import net.aradiata.plugin.ticks
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
+import java.io.Closeable
 import kotlin.io.path.*
 
-class PlayerHandle(val player: Player) {
+class PlayerHandle(val player: Player) : Closeable {
+    
+    private val jobs: MutableList<Job> = mutableListOf()
     
     var health = 20
     var mana = 20
@@ -18,6 +28,24 @@ class PlayerHandle(val player: Player) {
     fun save() {
         data.profile = serialize(player)
         data.save()
+    }
+    
+    init {
+        jobs += Plugin.scheduleEvery(5.ticks) {
+            player.spigot().sendMessage(
+                ChatMessageType.ACTION_BAR,
+                TextComponent(manaBar(mana))
+            )
+        }
+        jobs += Plugin.scheduleEvery(10.ticks) {
+            if (mana != 20) {
+                mana += 1
+            }
+        }
+    }
+    
+    override fun close() {
+        jobs.forEach(Job::cancel)
     }
     
 }

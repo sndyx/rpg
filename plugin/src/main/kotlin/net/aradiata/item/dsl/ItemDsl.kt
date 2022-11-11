@@ -1,4 +1,4 @@
-package net.aradiata.script
+package net.aradiata.item.dsl
 
 import kotlin.annotation.AnnotationRetention.BINARY
 import kotlin.annotation.AnnotationTarget.*

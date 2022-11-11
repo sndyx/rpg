@@ -1,13 +1,25 @@
 package net.aradiata.item
 
 import kotlinx.coroutines.CoroutineScope
+import net.aradiata.player.handle
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 
-class ItemEvents : java.io.Serializable {
-    var onEquip: (suspend CoroutineScope.(Player) -> Unit)? = null
-    var onUnequip: (suspend CoroutineScope.(Player) -> Unit)? = null
-    var onRightClick: (suspend CoroutineScope.(Player) -> Unit)? = null
-    var onLeftClick: (suspend CoroutineScope.(Player) -> Unit)? = null
-    var onHitPlayer: (suspend CoroutineScope.(Player, Player, Float) -> Unit)? = null
-    var onKillPlayer: (suspend CoroutineScope.(Player, Player) -> Unit)? = null
+class ItemEvents {
+    var equip: (suspend CoroutineScope.(Player) -> Unit)? = null
+    var unequip: (suspend CoroutineScope.(Player) -> Unit)? = null
+    var rightClick: (suspend CoroutineScope.(Player) -> Unit)? = null
+    var leftClick: (suspend CoroutineScope.(Player) -> Unit)? = null
+    var hitPlayer: (suspend CoroutineScope.(Player, Player, Float) -> Unit)? = null
+    var killPlayer: (suspend CoroutineScope.(Player, Player) -> Unit)? = null
+}
+
+suspend fun ability(manaUsage: Int, player: Player, action: suspend () -> Unit) {
+    if (player.gameMode == GameMode.CREATIVE) {
+        action()
+        return
+    }
+    if (player.handle().mana < manaUsage) return
+    player.handle().mana -= manaUsage
+    action()
 }

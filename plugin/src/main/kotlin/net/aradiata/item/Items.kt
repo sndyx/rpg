@@ -60,3 +60,9 @@ private fun MutableList<String>.addWrappingText(text: String) {
     }
     add(line)
 }
+
+fun ItemStack.toItem(): Item? {
+    return ItemRegistry.find {
+        it.material == type && it.model == itemMeta?.customModelData
+    }
+}
