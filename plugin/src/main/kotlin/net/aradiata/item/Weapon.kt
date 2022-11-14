@@ -10,7 +10,7 @@ class Weapon(
     description: String?,
     events: ItemEvents,
     val stats: List<WeaponStat>,
-    val suppressMeleeDamage: Boolean
+    val ignoreMelee: Boolean
 ) : Item(id, model, name, rarity, description, events) {
     
     override val material: Material = Material.STICK

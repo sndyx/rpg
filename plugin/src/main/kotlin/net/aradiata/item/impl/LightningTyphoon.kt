@@ -1,38 +1,17 @@
 package net.aradiata.item.impl
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import net.aradiata.Plugin
 import net.aradiata.item.*
 import net.aradiata.item.dsl.*
+import net.aradiata.player.damageTo
+import net.aradiata.player.handle
 import net.aradiata.plugin.sync
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.entity.LivingEntity
 import kotlin.math.*
 import kotlin.random.Random
-
-val armor = armor("id") {
-    
-    model = 1
-    name = "Test Helmet"
-    rarity = Rarity.Common // Uncommon, Rare, Epic, Legendary, Divine
-    // description = ""
-    type = ArmorType.Helmet // Chestplate, Leggings, Boots
-    
-    stats {
-        melee(10.0) // %
-        magic(10.0) // %
-        ranged(10.0) // %
-        
-        health(10.0) // +
-        defense(10.0) // +
-        mana(10.0) // +
-        speed(10.0) // %
-        attackSpeed(10.0) // %
-    }
-    
-}
 
 val lightningTyphoon = weapon("lightning-typhoon") {
     
@@ -76,7 +55,8 @@ val lightningTyphoon = weapon("lightning-typhoon") {
                                 it.location, 5.0, 5.0, 5.0
                             ).filterIsInstance<LivingEntity>().filterNot { it == player }
                             targets.forEach {
-                                it.damage(5.0)
+                                val damage = player.damageTo(it)
+                                it.damage(damage)
                             }
                         }
                         delay(100)

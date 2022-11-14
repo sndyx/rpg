@@ -1,28 +1,20 @@
 package net.aradiata.player
 
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.aradiata.Plugin
-import net.aradiata.item.ItemData
-import net.aradiata.item.ItemRegistry
-import net.aradiata.plugin.manaBar
-import net.aradiata.plugin.scheduleEvery
-import net.aradiata.plugin.ticks
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
+import net.aradiata.item.*
 import org.bukkit.entity.Player
-import java.io.Closeable
+import kotlin.coroutines.CoroutineContext
 import kotlin.io.path.*
 
-class PlayerHandle(val player: Player) : Closeable {
+class PlayerHandle(val player: Player) : CoroutineScope {
     
-    private val jobs: MutableList<Job> = mutableListOf()
+    override val coroutineContext: CoroutineContext = Plugin.coroutineContext
     
-    var health = 20
-    var mana = 20
-    
+    val state = PlayerState()
     val data = PlayerData(player)
     
     fun save() {
@@ -31,21 +23,8 @@ class PlayerHandle(val player: Player) : Closeable {
     }
     
     init {
-        jobs += Plugin.scheduleEvery(5.ticks) {
-            player.spigot().sendMessage(
-                ChatMessageType.ACTION_BAR,
-                TextComponent(manaBar(mana))
-            )
-        }
-        jobs += Plugin.scheduleEvery(10.ticks) {
-            if (mana != 20) {
-                mana += 1
-            }
-        }
-    }
-    
-    override fun close() {
-        jobs.forEach(Job::cancel)
+        scheduleTasks()
+        updateArmor()
     }
     
 }
@@ -89,11 +68,28 @@ class PlayerData(player: Player) {
     
 }
 
+class PlayerState {
+    // calculate damage on next hit
+    var weaponFlag = true
+    
+    var maxHealth: Double = 20.0
+    var maxMana: Double = 20.0
+    var mana: Double = maxMana
+    var defense: Double = 0.0
+    
+    var damage: Double = 1.0
+    var increaseMelee: Double = 0.0
+    var increaseMagic: Double = 0.0
+    var increaseRanged: Double = 0.0
+    
+    var ignoreMelee = false
+}
+
 fun serialize(player: Player): Profile =
     Profile(
         player.inventory.map { stack ->
             stack
-                .takeIf { it.itemMeta?.hasCustomModelData() == true }
+                .takeIf { it?.itemMeta?.hasCustomModelData() == true }
                 ?.itemMeta?.customModelData?.let { model ->
                     ItemRegistry
                         .find { it.model == model }

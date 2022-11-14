@@ -1,5 +1,6 @@
 package net.aradiata.player
 
+import kotlinx.coroutines.cancel
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -24,7 +25,7 @@ object PlayerManager : Listener {
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         val index = players.indexOfFirst { it.player.uniqueId == event.player.uniqueId }
-        players.removeAt(index).close()
+        players.removeAt(index).cancel()
     }
     
 }

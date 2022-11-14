@@ -1,9 +1,6 @@
 package net.aradiata.item.dsl
 
-import net.aradiata.item.Armor
-import net.aradiata.item.ArmorStat
-import net.aradiata.item.ArmorStatType
-import net.aradiata.item.ArmorType
+import net.aradiata.item.*
 
 fun armor(id: String, builder: ArmorBuilder.() -> Unit) =
     ArmorBuilder(id).apply(builder).build()
@@ -14,7 +11,9 @@ class ArmorBuilder(id: String) : ItemBuilder<Armor>(id) {
     var type: ArmorType? = null
     
     private val stats: MutableList<ArmorStat> = mutableListOf()
-    fun stats(builder: MutableList<ArmorStat>.() -> Unit) = buildList(builder)
+    
+    fun stats(builder: MutableList<ArmorStat>.() -> Unit) = stats.addAll(buildList(builder))
+    
     
     override fun build() = Armor(
         id, model!!, name!!, rarity!!, description, events, type!!, stats

@@ -3,7 +3,11 @@ package net.aradiata.plugin
 fun String.colored(): String =
     replace(Regex("&([0-9a-fA-Fkl-oL-OrKL-OR])"), "§$1")
 
-fun manaBar(mana: Int): String {
+val manaBar: Map<Int, String> = List(21) {
+    Pair(it, buildManaBar(it))
+}.toMap()
+
+private fun buildManaBar(mana: Int): String {
     val builder = StringBuilder("\uE001")
     builder.append(when (mana) {
         0 -> '\uE105'

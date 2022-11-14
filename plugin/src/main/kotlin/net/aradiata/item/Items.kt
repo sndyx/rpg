@@ -1,6 +1,6 @@
 package net.aradiata.item
 
-import net.aradiata.Config
+import org.bukkit.attribute.Attribute
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
@@ -28,6 +28,7 @@ fun Item.sync(data: ItemMeta) {
     data.lore = lore
     data.isUnbreakable = true
     data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
+    data.removeAttributeModifier(Attribute.GENERIC_ARMOR) // TODO: fix? doesnt remove armor levels
     data.setCustomModelData(model)
 }
 
@@ -47,10 +48,10 @@ private fun MutableList<String>.addWrappingText(text: String) {
                 i++
             }
         }
-        if (actualLength > Config.lineLength) {
+        if (actualLength > 30) {
             add(line)
             add("§$lastColor$word")
-        } else if (line.length + actualLength > Config.lineLength) {
+        } else if (line.length + actualLength > 30) {
             add(line)
             line = "§$lastColor$word "
         } else {
