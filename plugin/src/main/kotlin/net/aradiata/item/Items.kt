@@ -1,16 +1,22 @@
 package net.aradiata.item
 
 import org.bukkit.attribute.Attribute
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
 fun Item.toItemStack(): ItemStack {
     val item = ItemStack(material, 1)
-    val meta = item.itemMeta
+    val nms = CraftItemStack.asNMSCopy(item)
+    val nbt = nms./*getNbtCompound*/v()
+    nbt./*putString*/a("RpgId", id)
+    nms./*setNbtCompound*/c(nbt)
+    val new = CraftItemStack.asBukkitCopy(nms)
+    val meta = new.itemMeta
     sync(meta!!)
-    item.itemMeta = meta // Not a reference for whatever godforsaken reason
-    return item
+    new.itemMeta = meta // Not a reference for whatever godforsaken reason
+    return new
 }
 
 fun Item.sync(data: ItemMeta) {

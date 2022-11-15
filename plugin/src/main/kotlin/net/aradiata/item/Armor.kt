@@ -16,10 +16,10 @@ class Armor(
 ) {
     
     override val material: Material = when (type) {
-        ArmorType.Helmet -> Material.NETHERITE_HELMET
-        ArmorType.Chestplate -> Material.NETHERITE_CHESTPLATE
-        ArmorType.Leggings -> Material.NETHERITE_LEGGINGS
-        ArmorType.Boots -> Material.NETHERITE_BOOTS
+        ArmorType.Helmet -> Material.LEATHER_HELMET
+        ArmorType.Chestplate -> Material.LEATHER_CHESTPLATE
+        ArmorType.Leggings -> Material.LEATHER_LEGGINGS
+        ArmorType.Boots -> Material.LEATHER_BOOTS
     }
     
     override fun writeDetails(lore: MutableList<String>) {

@@ -6,15 +6,21 @@ import net.aradiata.item.ItemData
 @Serializable
 class PlayerMeta(
     val name: String,
-    val rank: String,
-    val profile: Int
+    var rank: String,
+    var profile: Int
 )
 
 @Serializable
 class Profile(
     val inventory: List<ItemData?>,
     val location: ProfileLocation
-)
+) {
+    
+    companion object {
+        fun new(): Profile = Profile(emptyList(), ProfileLocation(ProfileLocationDirection(0.0f, 0.0f), -85.5, 64.0, 596.5))
+    }
+    
+}
 
 @Serializable
 class ProfileLocation(

@@ -13,7 +13,7 @@ import org.bukkit.entity.LivingEntity
 import kotlin.math.*
 import kotlin.random.Random
 
-val lightningTyphoon = weapon("lightning-typhoon") {
+val lightningTyphoon = weapon("lightning_typhoon") {
     
     model = 1
     name = "Lightning Typhoon"

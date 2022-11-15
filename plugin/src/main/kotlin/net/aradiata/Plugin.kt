@@ -5,8 +5,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.newFixedThreadPoolContext
 import net.aradiata.command.ItemsCommand
+import net.aradiata.command.ProfileCommand
 import net.aradiata.item.loadItems
 import net.aradiata.player.InteractionListener
+import net.aradiata.player.PlayerHandle
 import net.aradiata.player.PlayerManager
 import net.aradiata.player.StateListener
 import org.bukkit.Bukkit
@@ -35,14 +37,19 @@ class Plugin : JavaPlugin() {
         instance = this
         loadItems()
         getCommand("items")!!.setExecutor(ItemsCommand)
+        getCommand("profile")!!.setExecutor(ProfileCommand)
         Bukkit.getPluginManager().registerEvents(ItemsCommand, this)
         Bukkit.getPluginManager().registerEvents(PlayerManager, this)
         Bukkit.getPluginManager().registerEvents(InteractionListener, this)
         Bukkit.getPluginManager().registerEvents(StateListener, this)
+        Bukkit.getOnlinePlayers().forEach { PlayerManager.players.add(PlayerHandle(it)) }
     }
     
     override fun onDisable() {
-        PlayerManager.players.forEach { it.cancel() }
+        PlayerManager.players.forEach {
+            it.save()
+            it.cancel()
+        }
     }
 
 }

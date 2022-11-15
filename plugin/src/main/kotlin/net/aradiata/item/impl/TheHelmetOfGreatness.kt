@@ -6,7 +6,7 @@ import net.aradiata.item.dsl.armor
 import net.aradiata.item.dsl.defense
 import net.aradiata.item.dsl.health
 
-val theHelmetOfGreatness = armor("the-helmet-of-greatness") {
+val theHelmetOfGreatness = armor("the_helmet_of_greatness") {
     
     model = 1
     name = "The Helmet of Greatness"

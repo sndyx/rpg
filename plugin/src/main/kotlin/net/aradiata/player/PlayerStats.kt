@@ -4,10 +4,10 @@ import net.aradiata.Plugin
 import net.aradiata.item.*
 import net.aradiata.plugin.schedule
 import net.aradiata.plugin.ticks
+import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import kotlin.math.min
 
 fun PlayerHandle.updateArmor() {
     state.apply {
@@ -19,7 +19,17 @@ fun PlayerHandle.updateArmor() {
             val armor = player.inventory.armorContents
                 .map { it?.toItem() as? Armor }
                 .filterNotNull()
-        
+            
+            offsetDefense = player.inventory.armorContents.filterNotNull().map {
+                when (it.type) {
+                    Material.LEATHER_HELMET -> 1.0
+                    Material.LEATHER_CHESTPLATE -> 3.0
+                    Material.LEATHER_LEGGINGS -> 2.0
+                    Material.LEATHER_BOOTS -> 1.0
+                    else -> 0.0
+                }
+            }.sum()
+            
             armor.forEach { piece ->
                 piece.stats.forEach { stat ->
                     when (stat.type) {
@@ -35,7 +45,7 @@ fun PlayerHandle.updateArmor() {
             }
         
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.baseValue = maxHealth
-            player.getAttribute(Attribute.GENERIC_ARMOR)?.baseValue = 20.0 - reduceDamage(20.0, defense)
+            player.getAttribute(Attribute.GENERIC_ARMOR)?.baseValue = 20.0 - reduceDamage(20.0, defense) - offsetDefense
         }
     }
 }

@@ -19,7 +19,7 @@ suspend fun ability(manaUsage: Int, player: Player, action: suspend () -> Unit) 
         action()
         return
     }
-    if (player.handle().mana < manaUsage) return
-    player.handle().mana -= manaUsage
+    if (player.handle().state.mana < manaUsage) return
+    player.handle().state.mana -= manaUsage
     action()
 }

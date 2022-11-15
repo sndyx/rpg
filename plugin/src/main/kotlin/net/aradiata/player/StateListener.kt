@@ -1,6 +1,5 @@
 package net.aradiata.player
 
-import io.netty.channel.ChannelHandler.Sharable
 import net.minecraft.world.item.ItemArmor
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
@@ -12,7 +11,6 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
-@Sharable
 object StateListener : Listener {
     
     @EventHandler

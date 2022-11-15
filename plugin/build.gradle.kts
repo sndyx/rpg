@@ -30,6 +30,7 @@ spigot {
     apiVersion = "1.19"
     commands {
         create("items")
+        create("profile")
     }
 }
 
