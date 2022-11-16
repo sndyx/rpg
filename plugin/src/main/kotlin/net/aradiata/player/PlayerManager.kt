@@ -1,5 +1,6 @@
 package net.aradiata.player
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
@@ -30,7 +31,10 @@ object PlayerManager : Listener {
     fun onQuit(event: PlayerQuitEvent) {
         val index = players.indexOfFirst { it.player.uniqueId == event.player.uniqueId }
         if (index == -1) return
-        players.removeAt(index).cancel()
+        players.removeAt(index).let {
+            it.save()
+            it.jobs.forEach(Job::cancel)
+        }
     }
     
     @EventHandler

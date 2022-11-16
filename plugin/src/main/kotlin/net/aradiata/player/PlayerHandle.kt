@@ -1,21 +1,19 @@
 package net.aradiata.player
 
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.aradiata.Plugin
 import net.aradiata.item.*
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
-import kotlin.coroutines.CoroutineContext
 import kotlin.io.path.*
 
-class PlayerHandle(val player: Player) : CoroutineScope {
+class PlayerHandle(val player: Player) {
     
-    override val coroutineContext: CoroutineContext = Plugin.coroutineContext
+    val jobs = mutableListOf<Job>()
     
     val state = PlayerState()
     val data = PlayerData(this)
@@ -79,7 +77,7 @@ class PlayerData(val handle: PlayerHandle) {
             handle.player.inventory.map { item ->
                 item?.let { stack ->
                     val nbt = CraftItemStack.asNMSCopy(stack).v()
-                    val rpgId = nbt.l("rpgId").takeUnless { it == "" }
+                    val rpgId = nbt.l("RpgId").takeUnless { it == "" }
                     rpgId?.let { ItemData(it, item.amount) }
                 }
             },
