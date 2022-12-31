@@ -1,6 +1,0 @@
-#!/bin/bash
-
-./zip.sh
-git add .
-git commit -m "Automated commit"
-git push
