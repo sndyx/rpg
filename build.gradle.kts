@@ -22,15 +22,15 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    compileOnly("org.spigotmc:spigot:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.19.4-R0.1-SNAPSHOT")
 }
 
 spigot {
+
     authors = listOf("sndy")
     apiVersion = "1.19"
     commands {
-        create("items")
-        create("profile")
+        create("toggleui")
     }
 }
 

@@ -1,56 +1,39 @@
 package net.aradiata.player
 
-import net.aradiata.plugin.manaBar
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
-import org.bukkit.GameMode
+import net.aradiata.Plugin
+import net.aradiata.util.scheduleEvery
+import net.aradiata.util.ticks
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import java.io.Closeable
 
-fun Player.handle(): PlayerHandle {
-    return PlayerManager.players.first {
-        it.player.uniqueId == uniqueId
-    }
-}
+object PlayerManager : Listener, Closeable {
 
-object PlayerManager : Listener {
-    
-    val players: MutableList<PlayerHandle> = mutableListOf()
-    
+    val players = mutableListOf<PlayerController>()
+
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        players.add(PlayerHandle(event.player))
+        players.add(PlayerController(event.player))
     }
-    
+
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        val index = players.indexOfFirst { it.player.uniqueId == event.player.uniqueId }
-        if (index == -1) return
-        players.removeAt(index).let {
-            it.save()
-            it.close()
+        players.removeAt(players.indexOfFirst { it.player == event.player }).close()
+    }
+
+    init {
+        Plugin.scheduleEvery(1.ticks) {
+            players.forEach(PlayerController::tick)
         }
     }
-    
-    @EventHandler
-    fun onGameModeChange(event: PlayerGameModeChangeEvent) {
-        if (event.newGameMode == GameMode.CREATIVE || event.newGameMode == GameMode.SPECTATOR) {
-            event.player.spigot().sendMessage(
-                ChatMessageType.ACTION_BAR,
-                TextComponent("")
-            )
-        } else {
-            event.player.handle().apply {
-                player.spigot().sendMessage(
-                    ChatMessageType.ACTION_BAR,
-                    TextComponent((manaBar[(state.mana / state.maxMana * 20).toInt()]))
-                )
-            }
-        }
+
+    override fun close() {
+        players.forEach(PlayerController::close)
     }
-    
+
 }
+
+val Player.controller get() = PlayerManager.players.first { it.player == this }
