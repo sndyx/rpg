@@ -1,0 +1,18 @@
+{
+  "attribute.item.rarity.common": "COMMON",
+  "attribute.item.rarity.uncommon": "UNCOMMON",
+  "attribute.item.rarity.rare": "RARE",
+  "attribute.item.rarity.epic": "EPIC",
+  "attribute.item.rarity.legendary": "LEGENDARY",
+  "attribute.item.rarity.divine": "DIVINE",
+  "attribute.item.melee_damage": "Melee Damage",
+  "attribute.item.ranged_damage": "Ranged Damage",
+  "attribute.item.magic_damage": "Magic Damage",
+  "attribute.item.speed": "Speed",
+  "attribute.item.defense": "Defense",
+  "attribute.item.health": "Health",
+  "attribute.item.edition": "Edition #%s",
+
+  "item.lightning_typhoon.name": "Lightning Typhoon",
+  "item.lightning_typhoon.description": ""
+}

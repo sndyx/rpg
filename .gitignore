@@ -1,2 +1,6 @@
-build/*
-.obsidian
+.idea/
+
+.gradle/
+build/
+
+debug/

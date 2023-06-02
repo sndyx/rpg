@@ -1,0 +1,15 @@
+{
+  "attribute.item.rarity.common": "普通",
+  "attribute.item.rarity.uncommon": "珍しい",
+  "attribute.item.rarity.rare": "希少",
+  "attribute.item.rarity.epic": "エピック",
+  "attribute.item.rarity.legendary": "伝説的",
+  "attribute.item.rarity.divine": "神聖",
+  "attribute.item.melee_damage": "近接ダメージ",
+  "attribute.item.ranged_damage": "遠距離ダメージ",
+  "attribute.item.magic_damage": "魔法ダメージ",
+  "attribute.item.speed": "スピード",
+  "attribute.item.defense": "防御力",
+  "attribute.item.health": "体力",
+  "attribute.item.edition": "第%s版"
+}

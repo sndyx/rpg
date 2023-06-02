@@ -1,7 +1,7 @@
 package net.aradiata.ui
 
 import net.aradiata.player.controller
-import net.aradiata.util.NO_OUTLINE
+import net.aradiata.text.NO_OUTLINE
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.entity.Player
 
